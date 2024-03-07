@@ -1,50 +1,63 @@
-import { defineStore } from 'pinia'
-import axios from 'axios'
-import { toast, type ToastOptions } from 'vue3-toastify'
-import type { User, oldUser } from '../user'
+import { defineStore } from "pinia";
+import axios from "axios";
+import { toast, type ToastOptions } from "vue3-toastify";
+import type { User, oldUser } from "../user";
 
 interface UserState {
-  user: User | null
-  isLoggedIn: boolean
+  user: User | null;
+  isLoggedIn: boolean;
 }
 
-export const useUsers = defineStore('users', {
+export const useUsers = defineStore("users", {
   state: (): UserState => ({
     user: null,
-    isLoggedIn: false
+    isLoggedIn: false,
   }),
 
   actions: {
     async handleRequest(request: Promise<any>, errorMessage: string) {
       try {
-        const response = await request
-        return response.data
+        const response = await request;
+        return response.data;
       } catch (error: any) {
         toast.error(error.response?.data.message || errorMessage, {
           autoClose: 1000,
-          position: toast.POSITION.TOP_RIGHT
-        } as ToastOptions)
+          position: toast.POSITION.TOP_RIGHT,
+        } as ToastOptions);
       }
     },
 
     async login(credentials: oldUser) {
-      return this.handleRequest(axios.post('/api/login', credentials), 'Login failed:')
+      const user = await this.handleRequest(
+        axios.post("/api/login", credentials),
+        "Login failed:"
+      );
+      this.user = user; // save the user in the state
+      this.isLoggedIn = true; // set the user's login status
+      return user;
     },
 
     async logout() {
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem("token");
       return this.handleRequest(
-        axios.post('/api/logout', {}, { headers: { Authorization: 'Bearer ' + token } }),
-        'Logout failed:'
-      )
+        axios.post(
+          "/api/logout",
+          {},
+          { headers: { Authorization: "Bearer " + token } }
+        ),
+        "Logout failed:"
+      );
     },
 
     async register(newUser: User) {
-      return this.handleRequest(axios.post('api/register', newUser), 'Registration failed:')
+      return this.handleRequest(
+        axios.post("api/register", newUser),
+        "Registration failed:"
+      );
     },
 
     async getUser() {
-      return this.handleRequest(axios.get('/api/user'), 'Get user failed:')
-    }
-  }
-})
+      return this.handleRequest(axios.get("/api/user"), "Get user failed:");
+    },
+  },
+});
