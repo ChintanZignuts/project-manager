@@ -1,15 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { useUsers } from "@/stores/users";
 interface Language {
   lang: string;
   code: string;
   icon: string;
 }
 
-const usersStore = useUsers();
 const selectedLanguage = ref<Language | null>(null);
-console.log(usersStore.user);
+const user = ref(JSON.parse(localStorage.getItem("user")));
+console.log(user.value);
 const language = ref([
   { lang: "English", code: "en", icon: "/country/united-kingdom.png" },
   { lang: "French", code: "fr", icon: "/country/france.png" },
@@ -25,7 +24,7 @@ const selectedLanguageIcon = computed(() => {
 });
 </script>
 <template>
-  <v-app-bar :elevation="0" rounded>
+  <v-app-bar :elevation="0" rounded class="bg-transparent">
     <template v-slot:append>
       <v-menu
         v-model:selectedLanguage="selectedLanguage"
@@ -72,10 +71,27 @@ const selectedLanguageIcon = computed(() => {
         <template v-slot:activator="{ props }">
           <v-btn v-bind="props" icon="mdi-account"> </v-btn>
         </template>
-        <v-list>
-          <v-list-item v-for="(item, i) in items" :key="i">
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
+        <v-list class="pa-3">
+          <h6 class="text-h6 font-weight-medium">User Profile</h6>
+
+          <v-row class="flex-column mt-4 pb-6">
+            <div class="ml-3 d-flex">
+              <v-icon size="58" icon="mdi-account"></v-icon>
+              <div>
+                <h6 class="text-h6 mb-n1">{{ user.name }}</h6>
+                <span class="text-subtitle-1 font-weight-regular textSecondary"
+                  >User</span
+                >
+              </div>
+            </div>
+            <div class="d-flex align-center mt-1">
+              <v-icon width="18" height="18"> mdi-email </v-icon>
+              <span
+                class="text-subtitle-1 font-weight-regular textSecondary ml-2"
+                >{{ user.email }}</span
+              >
+            </div>
+          </v-row>
         </v-list>
       </v-menu>
     </template>

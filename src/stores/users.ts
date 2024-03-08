@@ -4,16 +4,23 @@ import { toast, type ToastOptions } from "vue3-toastify";
 import type { User, oldUser } from "../user";
 
 interface UserState {
-  user: User | null;
   isLoggedIn: boolean;
+  user: User | null;
 }
 
 export const useUsers = defineStore("users", {
   state: (): UserState => ({
-    user: null,
     isLoggedIn: false,
+    user: null,
   }),
-
+  getters: {
+    getuser(): User | null {
+      return this.user;
+    },
+    isLogged(): boolean {
+      return this.isLoggedIn;
+    },
+  },
   actions: {
     async handleRequest(request: Promise<any>, errorMessage: string) {
       try {
@@ -21,20 +28,20 @@ export const useUsers = defineStore("users", {
         return response.data;
       } catch (error: any) {
         toast.error(error.response?.data.message || errorMessage, {
-          autoClose: 1000,
+          autoClose: 2000,
           position: toast.POSITION.TOP_RIGHT,
         } as ToastOptions);
       }
     },
-
     async login(credentials: oldUser) {
-      const user = await this.handleRequest(
+      const response = await this.handleRequest(
         axios.post("/api/login", credentials),
         "Login failed:"
       );
-      this.user = user; // save the user in the state
-      this.isLoggedIn = true; // set the user's login status
-      return user;
+      // Save user to localStorage
+      localStorage.setItem("user", JSON.stringify(response.user));
+      this.isLoggedIn = true;
+      return response;
     },
 
     async logout() {
@@ -50,10 +57,16 @@ export const useUsers = defineStore("users", {
     },
 
     async register(newUser: User) {
-      return this.handleRequest(
+      const response = await this.handleRequest(
         axios.post("api/register", newUser),
         "Registration failed:"
       );
+
+      this.user = response.user;
+      // Save user to localStorage
+      localStorage.setItem("user", JSON.stringify(response.user));
+      this.isLoggedIn = true;
+      return response;
     },
 
     async getUser() {

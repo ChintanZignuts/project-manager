@@ -32,7 +32,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
-  if (to.name === 'DashBoard' && !token) {
+  if (to.name === 'DashBoard' && (!token || token===undefined) ) {
     next({ name: 'home' })
   } else if (
     (to.name === 'home' || to.name === 'SignupForm' || to.name === 'SigninForm') &&

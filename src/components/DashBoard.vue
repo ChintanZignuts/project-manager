@@ -3,9 +3,11 @@ import router from "@/router";
 import NavBar from "./NavBar.vue";
 import { useUsers } from "@/stores/users";
 import { ref } from "vue";
+import MainBox from "./MainBox.vue";
 const usersStore = useUsers();
 const rail = ref(true);
 const drawer = ref(true);
+const dialog = ref(false);
 const handleLogout = async () => {
   await usersStore.logout();
   localStorage.removeItem("token");
@@ -24,6 +26,7 @@ const routeToDashBoard = () => {
         permanent
         @click="rail = false"
         class="rounded-lg"
+        temporary
       >
         <v-list-item
           class="text-h5"
@@ -51,24 +54,33 @@ const routeToDashBoard = () => {
             active
           ></v-list-item>
         </v-list>
-        <VList class="bottom">
-          <v-list-item
-            prepend-icon="mdi-logout"
-            title="Logout"
-            value="logout"
-            @click.stop="handleLogout()"
-          ></v-list-item>
-        </VList>
+        <template v-slot:append>
+          <v-list class="bottom" density="compact" nav>
+            <v-list-item
+              prepend-icon="mdi-logout"
+              title="Logout"
+              value="logout"
+              @click.stop="handleLogout()"
+            ></v-list-item>
+          </v-list>
+        </template>
       </v-navigation-drawer>
-      <v-main style="height: 100vh">
+      <v-main
+        style="height: 100vh; width: 100%"
+        class="bg-red-lighten-5"
+        @click.stop="rail = true"
+      >
         <NavBar />
+        <div class="d-flex align-center justify-center">
+          <MainBox />
+        </div>
       </v-main>
     </v-layout>
   </v-card>
 </template>
 <style scoped>
 .bottom {
-  position: absolute;
+  position: relative;
   bottom: 15px;
 }
 </style>

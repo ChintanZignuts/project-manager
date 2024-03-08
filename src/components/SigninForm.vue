@@ -10,7 +10,6 @@ const usersStore = useUsers()
 
 const handleSubmit = async (user: oldUser) => {
   const result = await usersStore.login(user)
-  console.log(result)
   if (result) {
     localStorage.setItem('token', result.token)
     router.push('/dashboard')
@@ -55,7 +54,7 @@ setTimeout(() => {
                     Log In
                   </VBtn>
                 </VCol>
-                <VDivider></VDivider>
+                <VDivider ></VDivider>
                 <VCol cols="12">
                   <p>
                     Don't have an account?
