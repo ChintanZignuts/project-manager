@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, defineEmits } from "vue";
+import { computed, ref } from "vue";
 interface Language {
   lang: string;
   code: string;
@@ -7,7 +7,7 @@ interface Language {
 }
 
 const selectedLanguage = ref<Language | null>(null);
-const user = ref(JSON.parse(localStorage.getItem("user")));
+const user = ref(JSON.parse(localStorage.getItem("user") as string));
 const emit = defineEmits(["btnClick"]);
 
 const handleButtonClick = () => {

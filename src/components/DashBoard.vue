@@ -6,7 +6,7 @@ import { ref } from "vue";
 import MainBox from "./MainBox.vue";
 const usersStore = useUsers();
 const rail = ref(true);
-const drawer = ref(false);
+const drawer = ref(true);
 const handleLogout = async () => {
   await usersStore.logout();
   localStorage.removeItem("token");
