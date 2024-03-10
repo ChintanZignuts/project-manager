@@ -6,27 +6,32 @@ import { ref } from "vue";
 import MainBox from "./MainBox.vue";
 const usersStore = useUsers();
 const rail = ref(true);
-const drawer = ref(true);
-const dialog = ref(false);
+const drawer = ref(false);
 const handleLogout = async () => {
   await usersStore.logout();
   localStorage.removeItem("token");
   router.push("/");
 };
+
+const changeDrawer = () => {
+  console.log("changeDrawer");
+  rail.value = false;
+  drawer.value = !drawer.value;
+};
+
 const routeToDashBoard = () => {
   router.push("/dashboard");
 };
 </script>
 <template>
-  <v-card>
-    <v-layout>
+  <v-card class="h-100">
+    <v-layout class="h-100">
       <v-navigation-drawer
         v-model="drawer"
         :rail="rail"
-        permanent
         @click="rail = false"
         class="rounded-lg"
-        temporary
+        mobile-breakpoint="sm"
       >
         <v-list-item
           class="text-h5"
@@ -66,12 +71,12 @@ const routeToDashBoard = () => {
         </template>
       </v-navigation-drawer>
       <v-main
-        style="height: 100vh; width: 100%"
+        style="width: 100%"
         class="bg-red-lighten-5"
         @click.stop="rail = true"
       >
-        <NavBar />
-        <div class="d-flex align-center justify-center">
+        <NavBar @btnClick="changeDrawer" />
+        <div class="d-flex align-center justify-center h-100">
           <MainBox />
         </div>
       </v-main>
