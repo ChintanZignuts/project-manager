@@ -1,4 +1,5 @@
 # project 2
+[Live Project Manager](https://project-manager-chi.vercel.app/)
 
 This template should help get you started developing with Vue 3 in Vite.
 
