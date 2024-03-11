@@ -4,7 +4,7 @@ import SignupForm from "../components/SignupForm.vue";
 import SigninForm from "../components/SigninForm.vue";
 import DashBoardLayout from "../layouts/DashboardLayout.vue";
 import ProjectsView from "@/views/ProjectsView.vue";
-import New from "@/views/new.vue";
+import New from "@/views/New.vue";
 
 const routes = [
   {
