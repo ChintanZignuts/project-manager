@@ -3,14 +3,20 @@ import { onMounted, ref } from "vue";
 import { useProjects } from "@/stores/projects";
 import type { Project } from "@/project";
 import { toast, type ToastOptions } from "vue3-toastify";
+import { computed } from "vue";
 
 const tab = ref(null);
 const search = ref("");
 const projectStore = useProjects();
 const projects = ref<Project[]>([]);
-const displayProject = ref<Project | object>({});
+const displayProject = ref<Project | null>(null);
 const dialog = ref(false);
 const cardColors = ["#E5FAFB", "#FDEDE8", "#FEF5E5", "#E6FFFA", "#33FFFF"];
+const rail = ref(true);
+const safeDisplayProject = computed(
+  () => displayProject.value || { name: "", description: "", updated_at: "" }
+);
+
 const newProject = ref({
   name: "",
   description: "",
@@ -39,16 +45,18 @@ const getProject = async (id: string) => {
 
 const deleteProject = async (id: string) => {
   try {
-    const isDisplayedProject = displayProject.value.id === id;
-    await projectStore.deleteProject(id);
-    projects.value = projects.value.filter((project) => project.id !== id);
-    if (isDisplayedProject) {
-      displayProject.value = {};
+    if (displayProject.value) {
+      const isDisplayedProject = displayProject.value.id === id;
+      await projectStore.deleteProject(id);
+      projects.value = projects.value.filter((project) => project.id !== id);
+      if (isDisplayedProject) {
+        displayProject.value = null;
+      }
+      toast.success("Project deleted successfully", {
+        autoClose: 2000,
+        position: toast.POSITION.TOP_RIGHT,
+      } as ToastOptions);
     }
-    toast.success("Project deleted successfully", {
-      autoClose: 2000,
-      position: toast.POSITION.TOP_RIGHT,
-    } as ToastOptions);
   } catch (error: any) {
     toast.error("Error deleting project", {
       autoClose: 2000,
@@ -134,13 +142,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="ma-10 w-75">
-    <v-layout class="rounded rounded-md">
-      <v-navigation-drawer mobile-breakpoint="md" class="sm w-33">
+  <div class="h-100 w-100 pa-5">
+    <v-layout class="rounded rounded-md h-100">
+      <v-navigation-drawer
+        v-model="rail"
+        mobile-breakpoint="sm"
+        :width="330"
+        rail
+        rail-width="330"
+      >
         <v-list>
           <v-list-item class="font-weight-bold">
             <v-list-title>All Projects</v-list-title>
-            <v-card class="mt-5">
+            <v-card class="mt-5" elevation="0">
               <v-data-iterator
                 :items="projects"
                 :items-per-page="10"
@@ -166,9 +180,8 @@ onMounted(() => {
                     <v-row dense>
                       <v-col
                         v-for="(item, i) in items"
-                        :key="item.id"
-                        cols="auto"
-                        md="12"
+                        :key="item.raw.id"
+                        cols="12"
                       >
                         <v-card
                           class="pb-3 cursor-pointer"
@@ -246,7 +259,12 @@ onMounted(() => {
           </v-list-item>
         </v-list>
       </v-navigation-drawer>
-
+      <v-app-bar class="d-flex d-sm-none border-b" elevation="0">
+        <v-app-bar-nav-icon
+          class="d-block d-sm-none w-100 h-100 rounded-0"
+          @click.stop="rail = !rail"
+        ></v-app-bar-nav-icon>
+      </v-app-bar>
       <v-app-bar elevation="0" class="border-b">
         <template v-slot:append>
           <v-dialog v-model="dialog" max-width="600">
@@ -302,11 +320,13 @@ onMounted(() => {
         </template>
       </v-app-bar>
 
-      <v-main class="d-flex justify-end bg-white" style="min-height: 800px">
-        <div class="d-flex flex-column h-100 w-75" min-width="66%">
+      <v-main class="d-flex justify-center bg-white">
+        <div class="d-flex flex-column h-100 w-100" min-width="66%">
           <v-tabs v-model="tab" align-tabs="end" color="deep-purple-accent-4">
             <v-tab :value="1"><v-icon>mdi-eye</v-icon></v-tab>
-            <v-tab :value="2" v-if="Object.keys(displayProject).length !== 0"
+            <v-tab
+              :value="2"
+              v-if="displayProject && Object.keys(displayProject).length !== 0"
               ><v-icon>mdi-text-box-edit</v-icon></v-tab
             >
           </v-tabs>
@@ -319,37 +339,37 @@ onMounted(() => {
                 <v-container
                   class="pa-6 d-flex flex-column align-center justify-center"
                 >
-                  <v-card class="w-100">
+                  <v-card class="w-100 h-100">
                     <v-card-title class="text-h6 mb-4">Name</v-card-title>
-                    <v-card-text>{{ displayProject.name }}</v-card-text>
+                    <v-card-text>{{ displayProject?.name }}</v-card-text>
 
                     <v-divider class="my-4"></v-divider>
 
                     <v-card-title class="text-h6 mb-4"
                       >Description</v-card-title
                     >
-                    <v-card-text>{{ displayProject.description }}</v-card-text>
+                    <v-card-text>{{ displayProject?.description }}</v-card-text>
                   </v-card>
                 </v-container>
               </v-card>
             </v-window-item>
             <v-window-item :value="2">
-              <v-card elevation="0" class="align-center justify-center w-100">
-                <v-container class="pa-6">
-                  <v-card class="w-100 pa-10">
+              <v-card elevation="0" class="mb-10 pa-10 bg-transparent">
+                <v-container class="h-75" :elevation="0">
+                  <v-card :elevation="0">
                     <h4 class="text-h6 mb-4">Change name</h4>
                     <v-text-field
-                      v-model="displayProject.name"
+                      v-model="safeDisplayProject.name"
                       label="Name"
                       row-height="25"
                       variant="outlined"
                     ></v-text-field>
                     <h4 class="text-h6 mb-4">Change Description</h4>
                     <v-textarea
-                      v-model="displayProject.description"
+                      v-model="safeDisplayProject.description"
                       label="Description"
                       row-height="25"
-                      rows="3"
+                      rows="2"
                       variant="outlined"
                       shaped
                     ></v-textarea>

@@ -1,39 +1,49 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
-import { EmailValidator, PasswordValidator } from '../validation'
-import { useUsers } from '../stores/users'
-import type { User } from '@/user'
-import router from '@/router'
+import { ref, type Ref } from "vue";
+import { EmailValidator, PasswordValidator } from "../validation";
+import { useUsers } from "../stores/users";
+import type { User } from "@/user";
+import router from "@/router";
 
-const newUser: Ref<User> = ref({ name: '', email: '', password: '', password_confirmation: '' })
-const showCard = ref(false)
-const usersStore = useUsers()
+const newUser: Ref<User> = ref({
+  name: "",
+  email: "",
+  password: "",
+  password_confirmation: "",
+});
+const showCard = ref(false);
+const usersStore = useUsers();
 
 const ConfirmPasswordValidator = (value: string) => {
   if (value) {
     if (newUser.value.password === value) {
-      return true
+      return true;
     }
-    return 'Passwords do not match.'
+    return "Passwords do not match.";
   }
-  return 'Confirm Password is required.'
-}
+  return "Confirm Password is required.";
+};
 const handleSubmit = async (newuser: User) => {
-  const result = await usersStore.register(newuser)
+  const result = await usersStore.register(newuser);
   if (result) {
-    localStorage.setItem('token', result.token)
-    router.push('/dashboard')
+    localStorage.setItem("token", result.token);
+    router.push("/dashboard");
   }
-}
+};
 setTimeout(() => {
-  showCard.value = true
-}, 100)
+  showCard.value = true;
+}, 100);
 </script>
 <template>
   <div class="d-flex align-center justify-center h-100">
     <div class="w-75 d-flex justify-center">
       <transition name="fade">
-        <VCard v-if="showCard" title="User Registration" class="w-100 pa-8" max-width="600">
+        <VCard
+          v-if="showCard"
+          title="User Registration"
+          class="w-100 pa-8"
+          max-width="600"
+        >
           <form @submit.prevent="handleSubmit(newUser)">
             <VContainer>
               <VRow>
@@ -80,7 +90,13 @@ setTimeout(() => {
                   ></VTextField>
                 </VCol>
                 <VCol cols="12">
-                  <VBtn size="x-large" type="submit" color="blue-grey" class="text-none" block>
+                  <VBtn
+                    size="x-large"
+                    type="submit"
+                    color="blue-grey"
+                    class="text-none"
+                    block
+                  >
                     Register User
                   </VBtn>
                 </VCol>

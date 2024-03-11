@@ -35,7 +35,7 @@ export const useUsers = defineStore("users", {
     },
     async login(credentials: oldUser) {
       const response = await this.handleRequest(
-        axios.post("/api/login", credentials),
+        axios.post("api/login", credentials),
         "Login failed:"
       );
       // Save user to localStorage

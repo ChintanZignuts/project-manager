@@ -28,7 +28,7 @@ export const useProjects = defineStore({
         });
 
         this.projects = response.data;
-        console.log(this.projects);
+
         return response.data;
       } catch (error: any) {
         toast.error(error.response?.data.message, {
