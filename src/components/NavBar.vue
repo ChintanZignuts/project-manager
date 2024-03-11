@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, defineEmits } from "vue";
 interface Language {
   lang: string;
   code: string;
