@@ -27,7 +27,7 @@ export const useUsers = defineStore("users", {
         const response = await request;
         return response.data;
       } catch (error: any) {
-        toast.error(error.response?.data.message || errorMessage, {
+        toast.error(error.response?.data.error || errorMessage, {
           autoClose: 2000,
           position: toast.POSITION.TOP_RIGHT,
         } as ToastOptions);

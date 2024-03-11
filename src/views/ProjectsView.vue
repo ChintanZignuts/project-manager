@@ -4,6 +4,7 @@ import { useProjects } from "@/stores/projects";
 import type { Project } from "@/project";
 import { toast, type ToastOptions } from "vue3-toastify";
 import { computed } from "vue";
+import DashboardLayout from "@/layouts/DashboardLayout.vue";
 
 const tab = ref(null);
 const search = ref("");
@@ -11,7 +12,7 @@ const projectStore = useProjects();
 const projects = ref<Project[]>([]);
 const displayProject = ref<Project | null>(null);
 const dialog = ref(false);
-const cardColors = ["#E5FAFB", "#FDEDE8", "#FEF5E5", "#E6FFFA", "#33FFFF"];
+const cardColors = ["#E5FAFB", "#FDEDE8", "#FEF5E5", "#E6FFFA"];
 const rail = ref(true);
 const safeDisplayProject = computed(
   () => displayProject.value || { name: "", description: "", updated_at: "" }
@@ -157,7 +158,7 @@ onMounted(() => {
             <v-card class="mt-5" elevation="0">
               <v-data-iterator
                 :items="projects"
-                :items-per-page="10"
+                :items-per-page="8"
                 :search="search"
               >
                 <template v-slot:header>
@@ -276,46 +277,49 @@ onMounted(() => {
                 v-bind="activatorProps"
               ></v-btn>
             </template>
+            <form @submit.prevent="addProject()">
+              <v-card title="Create Project">
+                <v-card-text>
+                  <v-row dense>
+                    <v-col cols="12">
+                      <v-text-field
+                        label="Name"
+                        variant="outlined"
+                        v-model="newProject.name"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12">
+                      <v-textarea
+                        label="Description"
+                        variant="outlined"
+                        v-model="newProject.description"
+                        required
+                      ></v-textarea>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
 
-            <v-card title="Create Project">
-              <v-card-text>
-                <v-row dense>
-                  <v-col cols="12">
-                    <v-text-field
-                      label="Name"
-                      v-model="newProject.name"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-textarea
-                      label="Description"
-                      v-model="newProject.description"
-                      required
-                    ></v-textarea>
-                  </v-col>
-                </v-row>
-              </v-card-text>
+                <v-divider></v-divider>
 
-              <v-divider></v-divider>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
 
-              <v-card-actions>
-                <v-spacer></v-spacer>
+                  <v-btn
+                    text="Close"
+                    variant="plain"
+                    @click="dialog = false"
+                  ></v-btn>
 
-                <v-btn
-                  text="Close"
-                  variant="plain"
-                  @click="dialog = false"
-                ></v-btn>
-
-                <v-btn
-                  color="primary"
-                  text="Save"
-                  variant="tonal"
-                  @click="addProject()"
-                ></v-btn>
-              </v-card-actions>
-            </v-card>
+                  <v-btn
+                    color="primary"
+                    text="Save"
+                    variant="tonal"
+                    type="submit"
+                  ></v-btn>
+                </v-card-actions>
+              </v-card>
+            </form>
           </v-dialog>
         </template>
       </v-app-bar>
@@ -356,31 +360,35 @@ onMounted(() => {
             <v-window-item :value="2">
               <v-card elevation="0" class="mb-10 pa-10 bg-transparent">
                 <v-container class="h-75" :elevation="0">
-                  <v-card :elevation="0">
-                    <h4 class="text-h6 mb-4">Change name</h4>
-                    <v-text-field
-                      v-model="safeDisplayProject.name"
-                      label="Name"
-                      row-height="25"
-                      variant="outlined"
-                    ></v-text-field>
-                    <h4 class="text-h6 mb-4">Change Description</h4>
-                    <v-textarea
-                      v-model="safeDisplayProject.description"
-                      label="Description"
-                      row-height="25"
-                      rows="2"
-                      variant="outlined"
-                      shaped
-                    ></v-textarea>
-                    <v-btn
-                      prepend-icon="mdi-content-save-outline"
-                      class="bg-amber-accent-4"
-                      @click.stop="updateProject()"
-                    >
-                      Save
-                    </v-btn>
-                  </v-card>
+                  <form @submit.prevent="updateProject()">
+                    <v-card :elevation="0">
+                      <h4 class="text-h6 mb-4">Change name</h4>
+                      <v-text-field
+                        v-model="safeDisplayProject.name"
+                        label="Name"
+                        row-height="25"
+                        variant="outlined"
+                        required
+                      ></v-text-field>
+                      <h4 class="text-h6 mb-4">Change Description</h4>
+                      <v-textarea
+                        v-model="safeDisplayProject.description"
+                        label="Description"
+                        row-height="25"
+                        rows="2"
+                        variant="outlined"
+                        required
+                        shaped
+                      ></v-textarea>
+                      <v-btn
+                        prepend-icon="mdi-content-save-outline"
+                        type="submit"
+                        class="bg-amber-accent-4"
+                      >
+                        Save
+                      </v-btn>
+                    </v-card>
+                  </form>
                 </v-container>
               </v-card>
             </v-window-item>

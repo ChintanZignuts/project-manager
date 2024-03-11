@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import router from "@/router";
-import NavBar from "./NavBar.vue";
+import { useRouter } from "vue-router";
+import NavBar from "../components/NavBar.vue";
 import { useUsers } from "@/stores/users";
 import { ref } from "vue";
-import MainBox from "./MainBox.vue";
+import ProjectsView from "@/views/ProjectsView.vue";
+
 const usersStore = useUsers();
 const rail = ref(true);
 const drawer = ref(true);
+const router = useRouter();
+
 const handleLogout = async () => {
   await usersStore.logout();
   localStorage.removeItem("token");
@@ -21,6 +24,9 @@ const changeDrawer = () => {
 
 const routeToDashBoard = () => {
   router.push("/dashboard");
+};
+const routeTonew = () => {
+  router.push("/new");
 };
 </script>
 <template>
@@ -53,10 +59,18 @@ const routeToDashBoard = () => {
         <v-list density="compact" nav>
           <v-list-item
             prepend-icon="mdi-view-dashboard"
-            title="DashBoard"
-            value="dashboard"
-            @click.stop="routeToDashBoard()"
-            active
+            title="Project"
+            value="project"
+            :class="{ active: $route.name === 'DashBoardLayout' }"
+            @click.stop="routeToDashBoard"
+          ></v-list-item>
+
+          <v-list-item
+            prepend-icon="mdi-view-dashboard"
+            title="New"
+            value="new"
+            :class="{ active: $route.name === 'New' }"
+            @click.stop="routeTonew"
           ></v-list-item>
         </v-list>
         <template v-slot:append>
@@ -77,7 +91,7 @@ const routeToDashBoard = () => {
       >
         <NavBar @btnClick="changeDrawer" />
         <div class="d-flex align-center justify-center h-100">
-          <MainBox />
+          <router-view />
         </div>
       </v-main>
     </v-layout>

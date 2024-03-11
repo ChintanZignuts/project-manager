@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, defineEmits } from "vue";
+import { computed, ref } from "vue";
 interface Language {
   lang: string;
   code: string;
@@ -8,18 +8,19 @@ interface Language {
 
 const selectedLanguage = ref<Language | null>(null);
 const user = ref(JSON.parse(localStorage.getItem("user") as string));
-const emit = defineEmits(["btnClick"]);
+
+const emit = defineEmits<{
+  (e: "btnClick"): void;
+}>();
 
 const handleButtonClick = () => {
-  console.log("handleButtonClick");
   emit("btnClick");
 };
 
 const language = ref([
+  { lang: "ગુજરાતી ", code: "india", icon: "/country/india.png" },
   { lang: "English", code: "en", icon: "/country/united-kingdom.png" },
   { lang: "French", code: "fr", icon: "/country/france.png" },
-  { lang: "中国人 ", code: "Chinese", icon: "/country/china.png" },
-  { lang: "ગુજરાતી ", code: "india", icon: "/country/india.png" },
 ]);
 
 const selectedLanguageIcon = computed(() => {

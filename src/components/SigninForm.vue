@@ -3,10 +3,12 @@ import { ref } from "vue";
 import { EmailValidator } from "../validation";
 import type { oldUser } from "@/user";
 import { useUsers } from "@/stores/users";
-import router from "@/router";
+import { useRouter } from "vue-router";
 const user = ref({ email: "", password: "" });
 const showCard = ref(false);
 const usersStore = useUsers();
+const show1 = ref(false);
+const router = useRouter();
 
 const handleSubmit = async (user: oldUser) => {
   const result = await usersStore.login(user);
@@ -46,12 +48,16 @@ setTimeout(() => {
                 </VCol>
                 <VCol cols="12">
                   <VTextField
+                    v-model="user.password"
+                    :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show1 ? 'text' : 'password'"
                     label="Password"
-                    type="password"
+                    name="input-10-1"
                     placeholder="Enter your password"
                     variant="outlined"
-                    v-model="user.password"
                     required
+                    counter
+                    @click:append-inner="show1 = !show1"
                   ></VTextField>
                 </VCol>
                 <VCol cols="12">

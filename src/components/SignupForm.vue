@@ -3,7 +3,7 @@ import { ref, type Ref } from "vue";
 import { EmailValidator, PasswordValidator } from "../validation";
 import { useUsers } from "../stores/users";
 import type { User } from "@/user";
-import router from "@/router";
+import { useRouter } from "vue-router";
 
 const newUser: Ref<User> = ref({
   name: "",
@@ -13,6 +13,9 @@ const newUser: Ref<User> = ref({
 });
 const showCard = ref(false);
 const usersStore = useUsers();
+const show1 = ref(false);
+const show2 = ref(false);
+const router = useRouter();
 
 const ConfirmPasswordValidator = (value: string) => {
   if (value) {
@@ -69,24 +72,30 @@ setTimeout(() => {
                 </VCol>
                 <VCol cols="12">
                   <VTextField
+                    v-model="newUser.password"
+                    :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show1 ? 'text' : 'password'"
                     label="Password"
-                    type="password"
                     placeholder="Enter your password"
                     variant="outlined"
-                    v-model="newUser.password"
                     :rules="[PasswordValidator]"
                     required
+                    counter
+                    @click:append-inner="show1 = !show1"
                   ></VTextField>
                 </VCol>
                 <VCol cols="12">
                   <VTextField
+                    v-model="newUser.password_confirmation"
+                    :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show2 ? 'text' : 'password'"
                     label="Confirm Password"
-                    type="password"
                     placeholder="Confirm Password"
                     variant="outlined"
-                    v-model="newUser.password_confirmation"
                     :rules="[ConfirmPasswordValidator]"
                     required
+                    counter
+                    @click:append-inner="show2 = !show2"
                   ></VTextField>
                 </VCol>
                 <VCol cols="12">
