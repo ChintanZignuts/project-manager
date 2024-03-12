@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import router from "@/router";
-import NavBar from "./NavBar.vue";
+import { useRouter } from "vue-router";
+import NavBar from "../components/NavBar.vue";
 import { useUsers } from "@/stores/users";
-import { ref } from "vue";
-import MainBox from "./MainBox.vue";
+import { ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+const { t, locale } = useI18n();
+watch(locale, (newlocale) => {
+  localStorage.setItem("locale", newlocale);
+});
+
 const usersStore = useUsers();
-const rail = ref(true);
-const drawer = ref(true);
+const rail = ref<boolean>(true);
+const drawer = ref<boolean>(true);
+const router = useRouter();
+
 const handleLogout = async () => {
   await usersStore.logout();
   localStorage.removeItem("token");
@@ -22,6 +29,9 @@ const changeDrawer = () => {
 const routeToDashBoard = () => {
   router.push("/dashboard");
 };
+const routeTonew = () => {
+  router.push("/marketplace");
+};
 </script>
 <template>
   <v-card class="h-100">
@@ -36,7 +46,7 @@ const routeToDashBoard = () => {
         <v-list-item
           class="text-h5"
           prepend-avatar="https://cdn.vuetifyjs.com/docs/images/brand-kit/v-logo.svg"
-          title="Project Manger"
+          :title="t('Project Manger')"
           nav
         >
           <template v-slot:append>
@@ -53,17 +63,25 @@ const routeToDashBoard = () => {
         <v-list density="compact" nav>
           <v-list-item
             prepend-icon="mdi-view-dashboard"
-            title="DashBoard"
-            value="dashboard"
-            @click.stop="routeToDashBoard()"
-            active
+            :title="t('Project')"
+            value="project"
+            :class="{ active: $route.name === 'DashBoardLayout' }"
+            @click.stop="routeToDashBoard"
+          ></v-list-item>
+
+          <v-list-item
+            prepend-icon="mdi-shopping"
+            :title="t('MarketPlace')"
+            value="new"
+            :class="{ active: $route.name === 'New' }"
+            @click.stop="routeTonew"
           ></v-list-item>
         </v-list>
         <template v-slot:append>
           <v-list class="bottom" density="compact" nav>
             <v-list-item
               prepend-icon="mdi-logout"
-              title="Logout"
+              :title="t('logout')"
               value="logout"
               @click.stop="handleLogout()"
             ></v-list-item>
@@ -77,7 +95,7 @@ const routeToDashBoard = () => {
       >
         <NavBar @btnClick="changeDrawer" />
         <div class="d-flex align-center justify-center h-100">
-          <MainBox />
+          <router-view />
         </div>
       </v-main>
     </v-layout>

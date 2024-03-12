@@ -1,39 +1,52 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
-import { EmailValidator, PasswordValidator } from '../validation'
-import { useUsers } from '../stores/users'
-import type { User } from '@/user'
-import router from '@/router'
+import { ref, type Ref } from "vue";
+import { EmailValidator, PasswordValidator } from "../validation";
+import { useUsers } from "../stores/users";
+import type { User } from "@/user";
+import { useRouter } from "vue-router";
 
-const newUser: Ref<User> = ref({ name: '', email: '', password: '', password_confirmation: '' })
-const showCard = ref(false)
-const usersStore = useUsers()
+const newUser: Ref<User> = ref({
+  name: "",
+  email: "",
+  password: "",
+  password_confirmation: "",
+});
+const showCard = ref<boolean>(false);
+const usersStore = useUsers();
+const show1 = ref<boolean>(false);
+const show2 = ref<boolean>(false);
+const router = useRouter();
 
 const ConfirmPasswordValidator = (value: string) => {
   if (value) {
     if (newUser.value.password === value) {
-      return true
+      return true;
     }
-    return 'Passwords do not match.'
+    return "Passwords do not match.";
   }
-  return 'Confirm Password is required.'
-}
+  return "Confirm Password is required.";
+};
 const handleSubmit = async (newuser: User) => {
-  const result = await usersStore.register(newuser)
+  const result = await usersStore.register(newuser);
   if (result) {
-    localStorage.setItem('token', result.token)
-    router.push('/dashboard')
+    localStorage.setItem("token", result.token);
+    router.push("/dashboard");
   }
-}
+};
 setTimeout(() => {
-  showCard.value = true
-}, 100)
+  showCard.value = true;
+}, 100);
 </script>
 <template>
   <div class="d-flex align-center justify-center h-100">
     <div class="w-75 d-flex justify-center">
       <transition name="fade">
-        <VCard v-if="showCard" title="User Registration" class="w-100 pa-8" max-width="600">
+        <VCard
+          v-if="showCard"
+          title="User Registration"
+          class="w-100 pa-8"
+          max-width="600"
+        >
           <form @submit.prevent="handleSubmit(newUser)">
             <VContainer>
               <VRow>
@@ -59,28 +72,40 @@ setTimeout(() => {
                 </VCol>
                 <VCol cols="12">
                   <VTextField
+                    v-model="newUser.password"
+                    :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show1 ? 'text' : 'password'"
                     label="Password"
-                    type="password"
                     placeholder="Enter your password"
                     variant="outlined"
-                    v-model="newUser.password"
                     :rules="[PasswordValidator]"
                     required
+                    counter
+                    @click:append-inner="show1 = !show1"
                   ></VTextField>
                 </VCol>
                 <VCol cols="12">
                   <VTextField
+                    v-model="newUser.password_confirmation"
+                    :append-inner-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="show2 ? 'text' : 'password'"
                     label="Confirm Password"
-                    type="password"
                     placeholder="Confirm Password"
                     variant="outlined"
-                    v-model="newUser.password_confirmation"
                     :rules="[ConfirmPasswordValidator]"
                     required
+                    counter
+                    @click:append-inner="show2 = !show2"
                   ></VTextField>
                 </VCol>
                 <VCol cols="12">
-                  <VBtn size="x-large" type="submit" color="blue-grey" class="text-none" block>
+                  <VBtn
+                    size="x-large"
+                    type="submit"
+                    color="blue-grey"
+                    class="text-none"
+                    block
+                  >
                     Register User
                   </VBtn>
                 </VCol>
