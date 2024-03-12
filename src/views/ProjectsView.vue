@@ -146,26 +146,26 @@ onMounted(() => {
 
 <template>
   <div class="h-100 w-100 pa-5">
-    <v-layout class="rounded rounded-md h-100">
-      <v-navigation-drawer
+    <VLayout class="rounded rounded-md h-100">
+      <VNavigationDrawer
         v-model="rail"
         mobile-breakpoint="sm"
         :width="330"
         rail
         rail-width="330"
       >
-        <v-list>
-          <v-list-item class="font-weight-bold">
-            <v-list-title>{{ t("All Projects") }}</v-list-title>
-            <v-card class="mt-5" elevation="0">
-              <v-data-iterator
+        <VList>
+          <VListItem class="font-weight-bold">
+            <VListTitle>{{ t("All Projects") }}</VListTitle>
+            <VCard class="mt-5" elevation="0">
+              <VDataIterator
                 :items="projects"
                 :items-per-page="8"
                 :search="search"
               >
                 <template v-slot:header>
-                  <v-toolbar class="px-2">
-                    <v-text-field
+                  <VToolbar class="px-2">
+                    <VTextField
                       v-model="search"
                       density="comfortable"
                       :placeholder="t('Search')"
@@ -174,25 +174,25 @@ onMounted(() => {
                       variant="solo"
                       clearable
                       hide-details
-                    ></v-text-field>
-                  </v-toolbar>
+                    ></VTextField>
+                  </VToolbar>
                 </template>
 
                 <template v-slot:default="{ items }">
-                  <v-container class="pa-2" fluid>
-                    <v-row dense>
-                      <v-col
+                  <VContainer class="pa-2" fluid>
+                    <VRow dense>
+                      <VCol
                         v-for="(item, i) in items"
                         :key="item.raw.id"
                         cols="12"
                       >
-                        <v-card
+                        <VCard
                           class="pb-3 cursor-pointer"
                           flat
                           @click.stop="getProject(item.raw.id)"
                           :style="{ backgroundColor: getNextColor() }"
                         >
-                          <v-list-item
+                          <VListItem
                             :subtitle="item.raw.description"
                             class="mb-2"
                           >
@@ -201,13 +201,13 @@ onMounted(() => {
                                 item.raw.name
                               }}</strong>
                             </template>
-                          </v-list-item>
+                          </VListItem>
 
                           <div class="d-flex justify-space-between px-4">
                             <div
                               class="d-flex align-center text-caption text-medium-emphasis me-1"
                             >
-                              <v-icon icon="mdi-clock" start></v-icon>
+                              <VIcon icon="mdi-clock" start></VIcon>
 
                               <div class="text-truncate">
                                 {{
@@ -216,59 +216,59 @@ onMounted(() => {
                               </div>
                             </div>
 
-                            <v-btn
+                            <VBtn
                               class="text-none bg-transparent"
                               @click.stop="deleteProject(item.raw.id)"
                               flat
                             >
-                              <v-icon>mdi-delete</v-icon>
-                            </v-btn>
+                              <VIcon>mdi-delete</VIcon>
+                            </VBtn>
                           </div>
-                        </v-card>
-                      </v-col>
-                    </v-row>
-                  </v-container>
+                        </VCard>
+                      </VCol>
+                    </VRow>
+                  </VContainer>
                 </template>
 
                 <template
                   v-slot:footer="{ page, pageCount, prevPage, nextPage }"
                 >
                   <div class="d-flex align-center justify-center pa-4">
-                    <v-btn
+                    <VBtn
                       :disabled="page === 1"
                       density="comfortable"
                       icon="mdi-arrow-left"
                       variant="tonal"
                       rounded
                       @click="prevPage"
-                    ></v-btn>
+                    ></VBtn>
 
                     <div class="mx-2 text-caption">
                       Page {{ page }} of {{ pageCount }}
                     </div>
 
-                    <v-btn
+                    <VBtn
                       :disabled="page >= pageCount"
                       density="comfortable"
                       icon="mdi-arrow-right"
                       variant="tonal"
                       rounded
                       @click="nextPage"
-                    ></v-btn>
+                    ></VBtn>
                   </div>
                 </template>
-              </v-data-iterator>
-            </v-card>
-          </v-list-item>
-        </v-list>
-      </v-navigation-drawer>
-      <v-app-bar class="d-flex d-sm-none border-b" elevation="0">
-        <v-app-bar-nav-icon
+              </VDataIterator>
+            </VCard>
+          </VListItem>
+        </VList>
+      </VNavigationDrawer>
+      <VAppBar class="d-flex d-sm-none border-b" elevation="0">
+        <VAppBarNavIcon
           class="d-block d-sm-none w-100 h-100 rounded-0"
           @click.stop="rail = !rail"
-        ></v-app-bar-nav-icon>
-      </v-app-bar>
-      <v-app-bar elevation="0" class="border-b">
+        ></VAppBarNavIcon>
+      </VAppBar>
+      <VAppBar elevation="0" class="border-b">
         <template v-slot:append>
           <CreateDiailog
             :buttonText="t('New Project')"
@@ -277,13 +277,13 @@ onMounted(() => {
             @submit="addProject"
           />
         </template>
-      </v-app-bar>
+      </VAppBar>
 
-      <v-main class="d-flex justify-center bg-white">
+      <VMain class="d-flex justify-center bg-white">
         <div class="d-flex flex-column h-100 w-100" min-width="66%">
-          <v-tabs v-model="tab" align-tabs="end" color="deep-purple-accent-4">
-            <v-tab :value="1"><v-icon>mdi-eye</v-icon></v-tab>
-            <v-tab
+          <VTabs v-model="tab" align-tabs="end" color="deep-purple-accent-4">
+            <VTab :value="1"><v-icon>mdi-eye</v-icon></VTab>
+            <VTab
               v-if="displayProject && Object.keys(displayProject).length !== 0"
             >
               <CreateDiailog
@@ -291,36 +291,36 @@ onMounted(() => {
                 :cardTitle="t('Edit Project')"
                 :id="displayProject.id"
                 @submit="updateProject"
-            /></v-tab>
-          </v-tabs>
-          <v-window v-model="tab">
-            <v-window-item :value="1">
-              <v-card
+            /></VTab>
+          </VTabs>
+          <VWindow v-model="tab">
+            <VWindowItem :value="1">
+              <VCard
                 elevation="0"
                 class="d-flex align-center justify-center w-100"
               >
-                <v-container
+                <VContainer
                   class="pa-6 d-flex flex-column align-center justify-center"
                 >
-                  <v-card class="w-100 h-100">
-                    <v-card-title class="text-h6 mb-4">{{
+                  <VCard class="w-100 h-100">
+                    <VCardTitle class="text-h6 mb-4">{{
                       t("Name")
-                    }}</v-card-title>
-                    <v-card-text>{{ displayProject?.name }}</v-card-text>
+                    }}</VCardTitle>
+                    <VCardText>{{ displayProject?.name }}</VCardText>
 
-                    <v-divider class="my-4"></v-divider>
+                    <VDivider class="my-4"></VDivider>
 
-                    <v-card-title class="text-h6 mb-4">{{
+                    <VCardTitle class="text-h6 mb-4">{{
                       t("Description")
-                    }}</v-card-title>
-                    <v-card-text>{{ displayProject?.description }}</v-card-text>
-                  </v-card>
-                </v-container>
-              </v-card>
-            </v-window-item>
-          </v-window>
+                    }}</VCardTitle>
+                    <VCardText>{{ displayProject?.description }}</VCardText>
+                  </VCard>
+                </VContainer>
+              </VCard>
+            </VWindowItem>
+          </VWindow>
         </div>
-      </v-main>
-    </v-layout>
+      </VMain>
+    </VLayout>
   </div>
 </template>

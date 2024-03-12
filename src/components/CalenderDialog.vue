@@ -13,7 +13,7 @@ watch(selectedDate, (newSelecteddate) => {
 });
 </script>
 <template>
-  <VDialog max-width="500" v-model="dialog">
+  <VDialog max-width="400" v-model="dialog">
     <template v-slot:activator="{ props: activatorProps }">
       <VBtn
         v-bind="activatorProps"
@@ -29,7 +29,6 @@ watch(selectedDate, (newSelecteddate) => {
           <VDatePicker v-model="selectedDate"></VDatePicker>
         </VRow>
       </VContainer>
-      <v-btn text="Close Dialog" @click="isActive.value = false"></v-btn>
     </VCard>
   </VDialog>
 </template>

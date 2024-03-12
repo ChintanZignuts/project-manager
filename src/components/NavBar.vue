@@ -44,67 +44,67 @@ const selectedLanguageIcon = computed(() => {
 });
 </script>
 <template>
-  <v-app-bar :elevation="0" rounded class="bg-transparent">
-    <v-app-bar-nav-icon
+  <VAppBar :elevation="0" rounded class="bg-transparent">
+    <VAppBarNavIcon
       class="d-block d-sm-none"
       @click.stop="handleButtonClick"
-    ></v-app-bar-nav-icon>
+    ></VAppBarNavIcon>
     <template v-slot:append>
-      <v-menu
+      <VMenu
         v-model:selectedLanguage="selectedLanguage"
         transition="slide-x-transition"
         class="mr-5"
       >
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" icon>
-            <v-avatar style="height: 22px; width: 22px">
-              <v-img
+          <VBtn v-bind="props" icon>
+            <VAvatar style="height: 22px; width: 22px">
+              <VImg
                 :src="selectedLanguageIcon"
                 alt="Selected Language Flag"
-              ></v-img>
-            </v-avatar>
-          </v-btn>
+              ></VImg>
+            </VAvatar>
+          </VBtn>
         </template>
 
-        <v-list>
-          <v-list-item
+        <VList>
+          <VListItem
             v-for="(item, i) in language"
             :key="i"
             @click="changeLanguage(item)"
           >
             <div class="d-flex ma-2">
-              <v-list-item-avatar class="mr-2">
-                <v-img
+              <VListItemAvatar class="mr-2">
+                <VImg
                   :src="item.icon"
                   width="24"
                   height="24"
                   alt="Language Flag"
-                ></v-img>
-              </v-list-item-avatar>
-              <v-list-item-title class="text-subtitle-1 font-weight-regular"
+                ></VImg>
+              </VListItemAvatar>
+              <VListItemTitle class="text-subtitle-1 font-weight-regular"
                 >{{ item.lang }}
                 <span class="text-disabled text-subtitle-1 pl-2"
                   >({{ item.code }})</span
-                ></v-list-item-title
+                ></VListItemTitle
               >
             </div>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-      <v-menu transition="slide-y-transition">
+          </VListItem>
+        </VList>
+      </VMenu>
+      <VMenu transition="slide-y-transition">
         <template v-slot:activator="{ props }">
-          <v-btn v-bind="props" icon="mdi-account"> </v-btn>
+          <VBtn v-bind="props" icon="mdi-account"> </VBtn>
         </template>
-        <v-list class="pa-3">
-          <v-row class="flex-column pa-3">
+        <VList class="pa-3">
+          <VRow class="flex-column pa-3">
             <h6 class="text-h6 font-weight-medium">{{ t("User Profile") }}</h6>
-            <v-divider></v-divider>
+            <VDivider></VDivider>
             <div class="d-flex align-center">
-              <v-icon
+              <VIcon
                 size="50"
                 icon="mdi-account-circle "
                 class="mr-4"
-              ></v-icon>
+              ></VIcon>
               <div>
                 <h6 class="text-h6 mb-n1">{{ user.name }}</h6>
                 <span class="text-subtitle-1 font-weight-regular textSecondary"
@@ -113,15 +113,15 @@ const selectedLanguageIcon = computed(() => {
               </div>
             </div>
             <div class="d-flex align-center mt-1">
-              <v-icon width="18" height="18"> mdi-email </v-icon>
+              <VIcon width="18" height="18"> mdi-email </VIcon>
               <span
                 class="text-subtitle-1 font-weight-regular textSecondary ml-2"
                 >{{ user.email }}</span
               >
             </div>
-          </v-row>
-        </v-list>
-      </v-menu>
+          </VRow>
+        </VList>
+      </VMenu>
     </template>
-  </v-app-bar>
+  </VAppBar>
 </template>

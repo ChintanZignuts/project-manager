@@ -32,6 +32,7 @@ const vuetify = createVuetify({
     },
   },
 });
+
 const i18n = createI18n({
   legacy: false,
   locale: localStorage.getItem("locale") ?? "English",
@@ -48,8 +49,8 @@ app.config.globalProperties.$axios = axios;
 
 app.use(Vue3Toasity, {
   autoClose: 3000,
-  // ...
 } as ToastContainerOptions);
+
 app.use(i18n);
 app.use(createPinia());
 app.use(router);

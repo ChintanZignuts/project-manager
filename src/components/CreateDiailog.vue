@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, defineProps, computed, watchEffect, watch } from "vue";
+import { ref, watch } from "vue";
 import { useProjects } from "@/stores/projects";
-import { useI18n } from "vue-i18n";
 import type { Project } from "@/project";
+import { useI18n } from "vue-i18n";
 const { t, locale } = useI18n();
 watch(locale, (newlocale) => {
   localStorage.setItem("locale", newlocale);
@@ -41,53 +41,53 @@ const submitForm = () => {
 };
 </script>
 <template>
-  <v-dialog v-model="dialog" max-width="600">
+  <VDialoialog v-model="dialog" max-width="600">
     <template v-slot:activator="{ props: activatorProps }">
-      <v-btn
+      <VBtn
         class="text-none font-weight-regular text-white bg-deep-orange-lighten-1"
         :text="buttonText"
         variant="tonal"
         v-bind="activatorProps"
         @click.stop="handleclick(id)"
-      ></v-btn>
+      ></VBtn>
     </template>
 
     <form @submit.prevent="submitForm">
-      <v-card :title="cardTitle">
-        <v-card-text>
-          <v-row dense>
-            <v-col cols="12">
-              <v-text-field
+      <VCard :title="cardTitle">
+        <VCardText>
+          <VRow dense>
+            <VCol cols="12">
+              <VTextField
                 :label="t('Name')"
                 variant="outlined"
                 v-model="projectvalue.name"
                 required
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12">
-              <v-textarea
+              ></VTextField>
+            </VCol>
+            <VCol cols="12">
+              <VTextarea
                 :label="t('Description')"
                 variant="outlined"
                 v-model="projectvalue.description"
                 required
-              ></v-textarea>
-            </v-col>
-          </v-row>
-        </v-card-text>
+              ></VTextarea>
+            </VCol>
+          </VRow>
+        </VCardText>
 
-        <v-divider></v-divider>
+        <VDivider></VDivider>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text="Close" variant="plain" @click="dialog = false"></v-btn>
-          <v-btn
+        <VCardActions>
+          <VSpacer></VSpacer>
+          <VBtn text="Close" variant="plain" @click="dialog = false"></VBtn>
+          <VBtn
             color="primary"
             text="Save"
             variant="tonal"
             type="submit"
-          ></v-btn>
-        </v-card-actions>
-      </v-card>
+          ></VBtn>
+        </VCardActions>
+      </VCard>
     </form>
-  </v-dialog>
+  </VDialoialog>
 </template>
