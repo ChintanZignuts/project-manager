@@ -30,7 +30,7 @@ const routeToDashBoard = () => {
   router.push("/dashboard");
 };
 const routeTonew = () => {
-  router.push("/new");
+  router.push("/marketplace");
 };
 </script>
 <template>
@@ -70,8 +70,8 @@ const routeTonew = () => {
           ></v-list-item>
 
           <v-list-item
-            prepend-icon="mdi-view-dashboard"
-            :title="t('New')"
+            prepend-icon="mdi-shopping"
+            :title="t('MarketPlace')"
             value="new"
             :class="{ active: $route.name === 'New' }"
             @click.stop="routeTonew"

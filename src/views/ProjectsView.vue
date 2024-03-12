@@ -4,7 +4,6 @@ import { useProjects } from "@/stores/projects";
 import type { Project } from "@/project";
 import { toast, type ToastOptions } from "vue3-toastify";
 import { computed } from "vue";
-import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import { watch } from "vue";
 import { useI18n } from "vue-i18n";
 import CreateDiailog from "@/components/CreateDiailog.vue";
@@ -272,8 +271,8 @@ onMounted(() => {
       <v-app-bar elevation="0" class="border-b">
         <template v-slot:append>
           <CreateDiailog
-            buttonText="New Project"
-            cardTitle="Create Project"
+            :buttonText="t('New Project')"
+            :cardTitle="t('Create Project')"
             :initialData="newProject"
             @submit="addProject"
           />
@@ -288,8 +287,8 @@ onMounted(() => {
               v-if="displayProject && Object.keys(displayProject).length !== 0"
             >
               <CreateDiailog
-                buttonText="Edit Project"
-                cardTitle="Edit Project"
+                :buttonText="t('Edit Project')"
+                :cardTitle="t('Edit Project')"
                 :id="displayProject.id"
                 @submit="updateProject"
             /></v-tab>

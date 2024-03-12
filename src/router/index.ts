@@ -4,7 +4,8 @@ import SignupForm from "../components/SignupForm.vue";
 import SigninForm from "../components/SigninForm.vue";
 import DashBoardLayout from "../layouts/DashboardLayout.vue";
 import ProjectsView from "@/views/ProjectsView.vue";
-import New from "@/views/New.vue";
+import New from "@/views/MarketPlaceView.vue";
+import MarketPlaceView from "@/views/MarketPlaceView.vue";
 
 const routes = [
   {
@@ -31,9 +32,9 @@ const routes = [
     meta: { requiresAuth: true, layout: "default" },
   },
   {
-    path: "/new",
-    name: "New",
-    component: New,
+    path: "/marketplace",
+    name: "Marketplace",
+    component: MarketPlaceView,
     meta: { requiresAuth: true, layout: "default" },
   },
   {

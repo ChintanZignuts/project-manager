@@ -6,11 +6,13 @@
     "All Projects": "Tous les Projets",
     "Search": "Rechercher",
     "Name": "Nom",
+    "Edit Project":"Modifier le projet",
     "Description": "Description",
     "New Project": "Nouveau Projet",
     "Change name": "Changer le nom",
     "Change Description": "Changer la description",
     "Save": "Enregistrer",
+    "MarketPlace":"Place du marché",
     "Create Project": "Créer un Projet",
     "close": "Fermer",
     "User Profile": "Profil Utilisateur"
