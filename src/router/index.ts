@@ -27,12 +27,14 @@ const routes = [
   {
     path: "/dashboard",
     name: "DashBoardLayout",
-    component: DashBoardLayout,
-    children: [
-      { path: "", component: ProjectsView }, // Default child component for /dashboard
-      { path: "/new", name: "New", component: New }, // Default child component for /dashboard
-    ],
-    meta: { requiresAuth: true },
+    component: ProjectsView,
+    meta: { requiresAuth: true, layout: "default" },
+  },
+  {
+    path: "/new",
+    name: "New",
+    component: New,
+    meta: { requiresAuth: true, layout: "default" },
   },
   {
     path: "/:catchAll(.*)",

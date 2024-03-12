@@ -5,15 +5,23 @@ import type { Project } from "@/project";
 import { toast, type ToastOptions } from "vue3-toastify";
 import { computed } from "vue";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
+import { watch } from "vue";
+import { useI18n } from "vue-i18n";
+import CreateDiailog from "@/components/CreateDiailog.vue";
+
+const { t, locale } = useI18n();
+watch(locale, (newlocale) => {
+  localStorage.setItem("locale", newlocale);
+});
 
 const tab = ref(null);
-const search = ref("");
+const search = ref<string>("");
 const projectStore = useProjects();
 const projects = ref<Project[]>([]);
 const displayProject = ref<Project | null>(null);
-const dialog = ref(false);
+const dialog = ref<boolean>(false);
 const cardColors = ["#E5FAFB", "#FDEDE8", "#FEF5E5", "#E6FFFA"];
-const rail = ref(true);
+const rail = ref<boolean>(true);
 const safeDisplayProject = computed(
   () => displayProject.value || { name: "", description: "", updated_at: "" }
 );
@@ -67,9 +75,9 @@ const deleteProject = async (id: string) => {
   }
 };
 
-const updateProject = async () => {
+const updateProject = async (editProject: Project) => {
   try {
-    const { id, name, description } = displayProject.value as Project;
+    const { id, name, description } = editProject;
     await projectStore.updateProject(id, name, description);
     await fetchProjects(1, 50);
     toast.success("Project updated successfully", {
@@ -85,17 +93,12 @@ const updateProject = async () => {
   }
 };
 
-const addProject = async () => {
+const addProject = async (newProject: Project) => {
   try {
-    await projectStore.createProject(
-      newProject.value.name,
-      newProject.value.description
-    );
-    // Clear the input fields
-    newProject.value.name = "";
-    newProject.value.description = "";
+    await projectStore.createProject(newProject.name, newProject.description);
+    newProject.name = "";
+    newProject.description = "";
     await fetchProjects(1, 50);
-    dialog.value = false;
     toast.success("Project created successfully", {
       autoClose: 2000,
       position: toast.POSITION.TOP_RIGHT,
@@ -113,7 +116,7 @@ let currentColorIndex = 0;
 
 const getNextColor = () => {
   const color = cardColors[currentColorIndex];
-  currentColorIndex = (currentColorIndex + 1) % cardColors.length; // Cycle through colors
+  currentColorIndex = (currentColorIndex + 1) % cardColors.length;
   return color;
 };
 
@@ -154,7 +157,7 @@ onMounted(() => {
       >
         <v-list>
           <v-list-item class="font-weight-bold">
-            <v-list-title>All Projects</v-list-title>
+            <v-list-title>{{ t("All Projects") }}</v-list-title>
             <v-card class="mt-5" elevation="0">
               <v-data-iterator
                 :items="projects"
@@ -166,7 +169,7 @@ onMounted(() => {
                     <v-text-field
                       v-model="search"
                       density="comfortable"
-                      placeholder="Search"
+                      :placeholder="t('Search')"
                       prepend-inner-icon="mdi-magnify"
                       style="max-width: 100%"
                       variant="solo"
@@ -268,59 +271,12 @@ onMounted(() => {
       </v-app-bar>
       <v-app-bar elevation="0" class="border-b">
         <template v-slot:append>
-          <v-dialog v-model="dialog" max-width="600">
-            <template v-slot:activator="{ props: activatorProps }">
-              <v-btn
-                class="text-none font-weight-regular text-white bg-deep-orange-lighten-1"
-                text="New Project"
-                variant="tonal"
-                v-bind="activatorProps"
-              ></v-btn>
-            </template>
-            <form @submit.prevent="addProject()">
-              <v-card title="Create Project">
-                <v-card-text>
-                  <v-row dense>
-                    <v-col cols="12">
-                      <v-text-field
-                        label="Name"
-                        variant="outlined"
-                        v-model="newProject.name"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-textarea
-                        label="Description"
-                        variant="outlined"
-                        v-model="newProject.description"
-                        required
-                      ></v-textarea>
-                    </v-col>
-                  </v-row>
-                </v-card-text>
-
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-
-                  <v-btn
-                    text="Close"
-                    variant="plain"
-                    @click="dialog = false"
-                  ></v-btn>
-
-                  <v-btn
-                    color="primary"
-                    text="Save"
-                    variant="tonal"
-                    type="submit"
-                  ></v-btn>
-                </v-card-actions>
-              </v-card>
-            </form>
-          </v-dialog>
+          <CreateDiailog
+            buttonText="New Project"
+            cardTitle="Create Project"
+            :initialData="newProject"
+            @submit="addProject"
+          />
         </template>
       </v-app-bar>
 
@@ -329,10 +285,14 @@ onMounted(() => {
           <v-tabs v-model="tab" align-tabs="end" color="deep-purple-accent-4">
             <v-tab :value="1"><v-icon>mdi-eye</v-icon></v-tab>
             <v-tab
-              :value="2"
               v-if="displayProject && Object.keys(displayProject).length !== 0"
-              ><v-icon>mdi-text-box-edit</v-icon></v-tab
             >
+              <CreateDiailog
+                buttonText="Edit Project"
+                cardTitle="Edit Project"
+                :id="displayProject.id"
+                @submit="updateProject"
+            /></v-tab>
           </v-tabs>
           <v-window v-model="tab">
             <v-window-item :value="1">
@@ -344,51 +304,18 @@ onMounted(() => {
                   class="pa-6 d-flex flex-column align-center justify-center"
                 >
                   <v-card class="w-100 h-100">
-                    <v-card-title class="text-h6 mb-4">Name</v-card-title>
+                    <v-card-title class="text-h6 mb-4">{{
+                      t("Name")
+                    }}</v-card-title>
                     <v-card-text>{{ displayProject?.name }}</v-card-text>
 
                     <v-divider class="my-4"></v-divider>
 
-                    <v-card-title class="text-h6 mb-4"
-                      >Description</v-card-title
-                    >
+                    <v-card-title class="text-h6 mb-4">{{
+                      t("Description")
+                    }}</v-card-title>
                     <v-card-text>{{ displayProject?.description }}</v-card-text>
                   </v-card>
-                </v-container>
-              </v-card>
-            </v-window-item>
-            <v-window-item :value="2">
-              <v-card elevation="0" class="mb-10 pa-10 bg-transparent">
-                <v-container class="h-75" :elevation="0">
-                  <form @submit.prevent="updateProject()">
-                    <v-card :elevation="0">
-                      <h4 class="text-h6 mb-4">Change name</h4>
-                      <v-text-field
-                        v-model="safeDisplayProject.name"
-                        label="Name"
-                        row-height="25"
-                        variant="outlined"
-                        required
-                      ></v-text-field>
-                      <h4 class="text-h6 mb-4">Change Description</h4>
-                      <v-textarea
-                        v-model="safeDisplayProject.description"
-                        label="Description"
-                        row-height="25"
-                        rows="2"
-                        variant="outlined"
-                        required
-                        shaped
-                      ></v-textarea>
-                      <v-btn
-                        prepend-icon="mdi-content-save-outline"
-                        type="submit"
-                        class="bg-amber-accent-4"
-                      >
-                        Save
-                      </v-btn>
-                    </v-card>
-                  </form>
                 </v-container>
               </v-card>
             </v-window-item>

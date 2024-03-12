@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+const { t, locale } = useI18n();
+watch(locale, (newlocale) => {
+  localStorage.setItem("locale", newlocale);
+});
+
 interface Language {
   lang: string;
   code: string;
@@ -18,10 +24,17 @@ const handleButtonClick = () => {
 };
 
 const language = ref([
-  { lang: "ગુજરાતી ", code: "india", icon: "/country/india.png" },
   { lang: "English", code: "en", icon: "/country/united-kingdom.png" },
+  { lang: "ગુજરાતી ", code: "gu", icon: "/country/india.png" },
   { lang: "French", code: "fr", icon: "/country/france.png" },
 ]);
+
+const changeLanguage = (selectedLang: Language) => {
+  // Set the selected language in the i18n instance
+  locale.value = selectedLang.code;
+  // Update the selected language in the component
+  selectedLanguage.value = selectedLang;
+};
 
 const selectedLanguageIcon = computed(() => {
   if (selectedLanguage.value) {
@@ -57,7 +70,7 @@ const selectedLanguageIcon = computed(() => {
           <v-list-item
             v-for="(item, i) in language"
             :key="i"
-            @click="selectedLanguage = item"
+            @click="changeLanguage(item)"
           >
             <div class="d-flex ma-2">
               <v-list-item-avatar class="mr-2">
@@ -84,7 +97,7 @@ const selectedLanguageIcon = computed(() => {
         </template>
         <v-list class="pa-3">
           <v-row class="flex-column pa-3">
-            <h6 class="text-h6 font-weight-medium">User Profile</h6>
+            <h6 class="text-h6 font-weight-medium">{{ t("User Profile") }}</h6>
             <v-divider></v-divider>
             <div class="d-flex align-center">
               <v-icon

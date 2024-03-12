@@ -2,12 +2,16 @@
 import { useRouter } from "vue-router";
 import NavBar from "../components/NavBar.vue";
 import { useUsers } from "@/stores/users";
-import { ref } from "vue";
-import ProjectsView from "@/views/ProjectsView.vue";
+import { ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+const { t, locale } = useI18n();
+watch(locale, (newlocale) => {
+  localStorage.setItem("locale", newlocale);
+});
 
 const usersStore = useUsers();
-const rail = ref(true);
-const drawer = ref(true);
+const rail = ref<boolean>(true);
+const drawer = ref<boolean>(true);
 const router = useRouter();
 
 const handleLogout = async () => {
@@ -42,7 +46,7 @@ const routeTonew = () => {
         <v-list-item
           class="text-h5"
           prepend-avatar="https://cdn.vuetifyjs.com/docs/images/brand-kit/v-logo.svg"
-          title="Project Manger"
+          :title="t('Project Manger')"
           nav
         >
           <template v-slot:append>
@@ -59,7 +63,7 @@ const routeTonew = () => {
         <v-list density="compact" nav>
           <v-list-item
             prepend-icon="mdi-view-dashboard"
-            title="Project"
+            :title="t('Project')"
             value="project"
             :class="{ active: $route.name === 'DashBoardLayout' }"
             @click.stop="routeToDashBoard"
@@ -67,7 +71,7 @@ const routeTonew = () => {
 
           <v-list-item
             prepend-icon="mdi-view-dashboard"
-            title="New"
+            :title="t('New')"
             value="new"
             :class="{ active: $route.name === 'New' }"
             @click.stop="routeTonew"
@@ -77,7 +81,7 @@ const routeTonew = () => {
           <v-list class="bottom" density="compact" nav>
             <v-list-item
               prepend-icon="mdi-logout"
-              title="Logout"
+              :title="t('logout')"
               value="logout"
               @click.stop="handleLogout()"
             ></v-list-item>

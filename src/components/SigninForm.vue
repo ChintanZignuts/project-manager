@@ -5,9 +5,9 @@ import type { oldUser } from "@/user";
 import { useUsers } from "@/stores/users";
 import { useRouter } from "vue-router";
 const user = ref({ email: "", password: "" });
-const showCard = ref(false);
+const showCard = ref<boolean>(false);
 const usersStore = useUsers();
-const show1 = ref(false);
+const show1 = ref<boolean>(false);
 const router = useRouter();
 
 const handleSubmit = async (user: oldUser) => {

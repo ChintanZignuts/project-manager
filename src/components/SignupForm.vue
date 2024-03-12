@@ -11,10 +11,10 @@ const newUser: Ref<User> = ref({
   password: "",
   password_confirmation: "",
 });
-const showCard = ref(false);
+const showCard = ref<boolean>(false);
 const usersStore = useUsers();
-const show1 = ref(false);
-const show2 = ref(false);
+const show1 = ref<boolean>(false);
+const show2 = ref<boolean>(false);
 const router = useRouter();
 
 const ConfirmPasswordValidator = (value: string) => {
