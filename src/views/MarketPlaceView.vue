@@ -13,29 +13,32 @@ const rail = ref<boolean>(true);
 
 <template>
   <div class="h-100 w-100 pa-5">
-    <v-layout class="rounded rounded-md h-100">
-      <v-navigation-drawer
+    <VLayout class="rounded rounded-md h-100">
+      <VNavigationDrawer
         v-model="rail"
         mobile-breakpoint="sm"
         :width="330"
         rail
         rail-width="330"
       >
-        <h4 class="pa-4 text-h5 font-weight-bold">Filter</h4>
+        <p class="pa-4">
+          <span class="text-h5 font-weight-bold">Filter</span>
+          <span>Date</span>
+        </p>
         <VDivider />
         <CalenderDialog btntext="Change Date" />
-      </v-navigation-drawer>
-      <v-app-bar class="d-flex d-sm-none border-b" elevation="0">
-        <v-btn @click.stop="rail = !rail" class="w-100 h-100">
-          <v-app-bar-nav-icon class="d-block d-sm-none rounded-0" text="Filter">
-          </v-app-bar-nav-icon>
+      </VNavigationDrawer>
+      <VAppBar class="d-flex d-sm-none border-b" elevation="0">
+        <VBtn @click.stop="rail = !rail" class="w-100 h-100">
+          <VAppBarNavIcon class="d-block d-sm-none rounded-0" text="Filter">
+          </VAppBarNavIcon>
           <h4>Filter</h4>
-        </v-btn>
-      </v-app-bar>
+        </VBtn>
+      </VAppBar>
 
-      <v-main class="d-flex justify-center bg-white">
+      <VMain class="d-flex justify-center bg-white">
         <div class="d-flex flex-column h-100 w-100" min-width="66%"></div>
-      </v-main>
-    </v-layout>
+      </VMain>
+    </VLayout>
   </div>
 </template>

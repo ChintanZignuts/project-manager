@@ -34,61 +34,61 @@ const routeTonew = () => {
 };
 </script>
 <template>
-  <v-card class="h-100">
-    <v-layout class="h-100">
-      <v-navigation-drawer
+  <VCard class="h-100">
+    <VLayout class="h-100">
+      <VNavigationDrawer
         v-model="drawer"
         :rail="rail"
         @click="rail = false"
         class="rounded-lg"
         mobile-breakpoint="sm"
       >
-        <v-list-item
+        <VListItem
           class="text-h5"
           prepend-avatar="https://cdn.vuetifyjs.com/docs/images/brand-kit/v-logo.svg"
           :title="t('Project Manger')"
           nav
         >
           <template v-slot:append>
-            <v-btn
+            <VBtn
               icon="mdi-chevron-left"
               variant="text"
               @click.stop="rail = !rail"
-            ></v-btn>
+            ></VBtn>
           </template>
-        </v-list-item>
+        </VListItem>
 
-        <v-divider></v-divider>
+        <VDivider></VDivider>
 
-        <v-list density="compact" nav>
-          <v-list-item
+        <VList density="compact" nav>
+          <VListItem
             prepend-icon="mdi-view-dashboard"
             :title="t('Project')"
             value="project"
             :class="{ active: $route.name === 'DashBoardLayout' }"
             @click.stop="routeToDashBoard"
-          ></v-list-item>
+          ></VListItem>
 
-          <v-list-item
+          <VListItem
             prepend-icon="mdi-shopping"
             :title="t('MarketPlace')"
             value="new"
             :class="{ active: $route.name === 'New' }"
             @click.stop="routeTonew"
-          ></v-list-item>
-        </v-list>
+          ></VListItem>
+        </VList>
         <template v-slot:append>
-          <v-list class="bottom" density="compact" nav>
-            <v-list-item
+          <VList class="bottom" density="compact" nav>
+            <VListItem
               prepend-icon="mdi-logout"
               :title="t('logout')"
               value="logout"
               @click.stop="handleLogout()"
-            ></v-list-item>
-          </v-list>
+            ></VListItem>
+          </VList>
         </template>
-      </v-navigation-drawer>
-      <v-main
+      </VNavigationDrawer>
+      <VMain
         style="width: 100%"
         class="bg-red-lighten-5"
         @click.stop="rail = true"
@@ -97,9 +97,9 @@ const routeTonew = () => {
         <div class="d-flex align-center justify-center h-100">
           <router-view />
         </div>
-      </v-main>
-    </v-layout>
-  </v-card>
+      </VMain>
+    </VLayout>
+  </VCard>
 </template>
 <style scoped>
 .bottom {
