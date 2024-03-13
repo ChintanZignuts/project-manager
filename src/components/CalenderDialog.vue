@@ -6,6 +6,8 @@ defineProps<{
 }>();
 const dialog = ref<boolean>(false);
 const date = new Date();
+const mindate = new Date(date);
+mindate.setDate(date.getDate() - 1);
 const selectedDate = ref<Date>(date);
 const emit = defineEmits<{
   (e: "date-changed", date: Date): void;
@@ -29,7 +31,7 @@ watch(selectedDate, (newDate) => {
     <VCard>
       <VContainer>
         <VRow justify="space-around">
-          <VDatePicker v-model="selectedDate"></VDatePicker>
+          <VDatePicker v-model="selectedDate" :min="mindate"></VDatePicker>
         </VRow>
       </VContainer>
     </VCard>
