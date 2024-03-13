@@ -9,7 +9,11 @@ export interface Items {
   category: string;
   images: string[];
 }
-
+export interface CartItem {
+  orderDate: string;
+  Item: Items;
+  quantity: number;
+}
 // Your JSON data
 export const itemsData: Items[] = [
   {

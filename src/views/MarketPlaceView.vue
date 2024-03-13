@@ -1,9 +1,11 @@
 <script setup lang="ts">
 //imports
 import CalenderDialog from "@/components/CalenderDialog.vue";
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { itemsData, type Items } from "@/Productlist";
+import { itemsData, type Items, type CartItem } from "@/Productlist";
+import { useCartStore } from "@/stores/cart";
+
 //transactors
 const { t, locale } = useI18n();
 watch(locale, (newlocale) => {
@@ -11,6 +13,7 @@ watch(locale, (newlocale) => {
 });
 
 //variables
+const cartStore = useCartStore();
 const rail = ref<boolean>(true);
 const date: Date = new Date();
 const orderdate = ref<string>(date.toDateString());
@@ -33,7 +36,7 @@ const formatDate = (dateString: string): string => {
 };
 
 const handaldateChange = (newdate: Date) => {
-  localStorage.setItem("currentDate", newdate.toDateString());
+  cartStore.currentDate = newdate.toDateString();
   if (newdate) {
     const cartItems: { item: Items; dateAdded: string }[] = JSON.parse(
       localStorage.getItem("cart") || "[]"
@@ -59,15 +62,9 @@ const filterCurrentProduct = (currentCategory: string) => {
     (item) => item.category === currentCategory
   );
 };
-const addToCart = (item: Items) => {
-  const currentDate = localStorage.getItem("currentDate");
-  if (currentDate) {
-    const cartItems: { item: Items; dateAdded: string }[] = JSON.parse(
-      localStorage.getItem("cart") || "[]"
-    );
-    cartItems.push({ item, dateAdded: currentDate });
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }
+const addToCart = (Item: Items) => {
+  cartStore.addToCart(Item);
+  console.log(cartStore.cartItems);
 };
 </script>
 
@@ -156,7 +153,7 @@ const addToCart = (item: Items) => {
       <VAppBar class="border-b elevation-0">
         <p class="text-subtitle-2 ma-4 font-weight-thin">
           Order For:
-          {{ formatDate() }}
+          {{ formatDate(cartStore.currentDate) }}
         </p>
       </VAppBar>
 
