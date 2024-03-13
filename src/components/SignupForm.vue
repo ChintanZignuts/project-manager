@@ -1,10 +1,12 @@
 <script setup lang="ts">
+//imports
 import { ref, type Ref } from "vue";
 import { EmailValidator, PasswordValidator } from "../validation";
 import { useUsers } from "../stores/users";
 import type { User } from "@/user";
 import { useRouter } from "vue-router";
 
+//variables
 const newUser: Ref<User> = ref({
   name: "",
   email: "",
@@ -17,6 +19,8 @@ const show1 = ref<boolean>(false);
 const show2 = ref<boolean>(false);
 const router = useRouter();
 
+
+//functions
 const ConfirmPasswordValidator = (value: string) => {
   if (value) {
     if (newUser.value.password === value) {

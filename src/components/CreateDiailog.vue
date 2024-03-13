@@ -1,25 +1,33 @@
 <script setup lang="ts">
+//imports
 import { ref, watch } from "vue";
 import { useProjects } from "@/stores/projects";
 import type { Project } from "@/project";
 import { useI18n } from "vue-i18n";
+
+//for translate
 const { t, locale } = useI18n();
 watch(locale, (newlocale) => {
   localStorage.setItem("locale", newlocale);
 });
-const projectStore = useProjects();
-const { buttonText, cardTitle, id } = defineProps([
-  "buttonText",
-  "cardTitle",
-  "id",
-]);
 
+//variable
+const projectStore = useProjects();
 const dialog = ref<boolean>(false);
 const emits = defineEmits(["submit"]);
 const projectvalue = ref({
   name: "",
   description: "",
 });
+
+//props
+const { buttonText, cardTitle, id } = defineProps([
+  "buttonText",
+  "cardTitle",
+  "id",
+]);
+
+//Function
 const getProject = async (id: string) => {
   try {
     const res = await projectStore.fetchProjectById(id);
@@ -41,7 +49,7 @@ const submitForm = () => {
 };
 </script>
 <template>
-  <VDialoialog v-model="dialog" max-width="600">
+  <VDialog v-model="dialog" max-width="600">
     <template v-slot:activator="{ props: activatorProps }">
       <VBtn
         class="text-none font-weight-regular text-white bg-deep-orange-lighten-1"
@@ -89,5 +97,5 @@ const submitForm = () => {
         </VCardActions>
       </VCard>
     </form>
-  </VDialoialog>
+  </VDialog>
 </template>

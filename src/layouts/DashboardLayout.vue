@@ -1,19 +1,24 @@
 <script setup lang="ts">
+//import
 import { useRouter } from "vue-router";
 import NavBar from "../components/NavBar.vue";
 import { useUsers } from "@/stores/users";
 import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+
+//translates
 const { t, locale } = useI18n();
 watch(locale, (newlocale) => {
   localStorage.setItem("locale", newlocale);
 });
 
+//variables
 const usersStore = useUsers();
 const rail = ref<boolean>(true);
 const drawer = ref<boolean>(true);
 const router = useRouter();
 
+//functions
 const handleLogout = async () => {
   await usersStore.logout();
   localStorage.removeItem("token");

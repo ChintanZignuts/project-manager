@@ -1,4 +1,5 @@
 <script setup lang="ts">
+//imports
 import { onMounted, ref } from "vue";
 import { useProjects } from "@/stores/projects";
 import type { Project } from "@/project";
@@ -8,28 +9,26 @@ import { watch } from "vue";
 import { useI18n } from "vue-i18n";
 import CreateDiailog from "@/components/CreateDiailog.vue";
 
+//translator
 const { t, locale } = useI18n();
 watch(locale, (newlocale) => {
   localStorage.setItem("locale", newlocale);
 });
 
+//variables
 const tab = ref(null);
 const search = ref<string>("");
 const projectStore = useProjects();
 const projects = ref<Project[]>([]);
 const displayProject = ref<Project | null>(null);
-const dialog = ref<boolean>(false);
 const cardColors = ["#E5FAFB", "#FDEDE8", "#FEF5E5", "#E6FFFA"];
 const rail = ref<boolean>(true);
-const safeDisplayProject = computed(
-  () => displayProject.value || { name: "", description: "", updated_at: "" }
-);
-
 const newProject = ref({
   name: "",
   description: "",
 });
 
+//functions for handle database request and tost messages
 const fetchProjects = async (
   page?: number,
   pageSize?: number

@@ -1,38 +1,42 @@
 <script setup lang="ts">
+//imports
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+
+//translate
 const { t, locale } = useI18n();
 watch(locale, (newlocale) => {
   localStorage.setItem("locale", newlocale);
 });
 
+//interfaces
 interface Language {
   lang: string;
   code: string;
   icon: string;
 }
 
+//variables
 const selectedLanguage = ref<Language | null>(null);
 const user = ref(JSON.parse(localStorage.getItem("user") as string));
-
-const emit = defineEmits<{
-  (e: "btnClick"): void;
-}>();
-
-const handleButtonClick = () => {
-  emit("btnClick");
-};
-
 const language = ref([
   { lang: "English", code: "en", icon: "/country/united-kingdom.png" },
   { lang: "ગુજરાતી ", code: "gu", icon: "/country/india.png" },
   { lang: "French", code: "fr", icon: "/country/france.png" },
 ]);
 
+//emits
+const emit = defineEmits<{
+  (e: "btnClick"): void;
+}>();
+
+//functions
+const handleButtonClick = () => {
+  emit("btnClick");
+};
+
 const changeLanguage = (selectedLang: Language) => {
-  // Set the selected language in the i18n instance
   locale.value = selectedLang.code;
-  // Update the selected language in the component
   selectedLanguage.value = selectedLang;
 };
 
@@ -100,11 +104,7 @@ const selectedLanguageIcon = computed(() => {
             <h6 class="text-h6 font-weight-medium">{{ t("User Profile") }}</h6>
             <VDivider></VDivider>
             <div class="d-flex align-center">
-              <VIcon
-                size="50"
-                icon="mdi-account-circle "
-                class="mr-4"
-              ></VIcon>
+              <VIcon size="50" icon="mdi-account-circle " class="mr-4"></VIcon>
               <div>
                 <h6 class="text-h6 mb-n1">{{ user.name }}</h6>
                 <span class="text-subtitle-1 font-weight-regular textSecondary"

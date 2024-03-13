@@ -1,15 +1,19 @@
 <script setup lang="ts">
+//imports
 import { ref } from "vue";
 import { EmailValidator } from "../validation";
 import type { oldUser } from "@/user";
 import { useUsers } from "@/stores/users";
 import { useRouter } from "vue-router";
+
+//variables
 const user = ref({ email: "", password: "" });
 const showCard = ref<boolean>(false);
 const usersStore = useUsers();
 const show1 = ref<boolean>(false);
 const router = useRouter();
 
+//Functions
 const handleSubmit = async (user: oldUser) => {
   const result = await usersStore.login(user);
   if (result) {

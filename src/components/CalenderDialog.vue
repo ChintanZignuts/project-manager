@@ -7,8 +7,11 @@ defineProps<{
 const dialog = ref<boolean>(false);
 const date = new Date();
 const selectedDate = ref<Date>(date);
-watch(selectedDate, (newSelecteddate) => {
-  console.log(newSelecteddate);
+const emit = defineEmits<{
+  (e: "date-changed", date: Date): void;
+}>();
+watch(selectedDate, (newDate) => {
+  emit("date-changed", newDate);
   dialog.value = false;
 });
 </script>
