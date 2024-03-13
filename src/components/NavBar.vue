@@ -3,7 +3,9 @@
 import { computed, ref, watch, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useCartStore } from "@/stores/cart";
 import type { Items } from "@/Productlist";
+
 //translate
 const { t, locale } = useI18n();
 watch(locale, (newlocale) => {
@@ -18,22 +20,15 @@ interface Language {
 }
 
 //variables
+const cartStore = useCartStore();
 const selectedLanguage = ref<Language | null>(null);
 const user = ref(JSON.parse(localStorage.getItem("user") as string));
 const router = useRouter();
-const cartLength = ref<number>(0);
 const language = ref([
   { lang: "English", code: "en", icon: "/country/united-kingdom.png" },
   { lang: "ગુજરાતી ", code: "gu", icon: "/country/india.png" },
   { lang: "French", code: "fr", icon: "/country/france.png" },
 ]);
-watchEffect(() => {
-  const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
-  cartLength.value = currentCart.filter(
-    (item: { item: Items; dateAdded: string }) =>
-      item.dateAdded === localStorage.getItem("currentDate")
-  ).length;
-});
 
 //emits
 const emit = defineEmits<{
@@ -69,7 +64,7 @@ const selectedLanguageIcon = computed(() => {
     ></VAppBarNavIcon>
     <template v-slot:append>
       <v-btn icon @click.stop="handleCart">
-        <v-badge :content="cartLength">
+        <v-badge :content="cartStore.ItemsInCart">
           <v-icon icon="mdi-cart-outline"></v-icon>
         </v-badge>
       </v-btn>
