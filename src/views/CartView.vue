@@ -6,8 +6,14 @@ import { toast, type ToastOptions } from "vue3-toastify";
 const cartStore = useCartStore();
 const tab = ref<string | null>(null);
 const router = useRouter();
+
 const headers = ref([
-  { title: "Product", align: "start", key: "product", width: "30%" },
+  {
+    title: "Product",
+    align: "start",
+    key: "product",
+    width: "30%",
+  },
   { title: "Price", align: "end", key: "Item.price" },
   { title: "Quantity", align: "center", key: "quantity" },
   { title: "Total", align: "end", key: "total" },
@@ -99,8 +105,13 @@ const decrement = () => {};
                 >
               </div></v-tab
             >
-            <v-tab value="two" height="70px" class="rounded-lg"
-              ><VIcon>mdi-note-text-outline</VIcon>
+            <v-tab
+              value="two"
+              height="70px"
+              class="rounded-lg"
+              :disabled="cartStore.currentCartItem.length === 0"
+            >
+              <VIcon>mdi-note-text-outline</VIcon>
               <div>
                 <div class="ma-0 pa-0"><Span>Billing</Span></div>
                 <span
