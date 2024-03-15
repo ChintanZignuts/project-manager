@@ -9,17 +9,18 @@ import { toast, type ToastOptions } from "vue3-toastify";
 const cartStore = useCartStore();
 const tab = ref<string | null>(null);
 const router = useRouter();
-const headers = ref([
+const headers = ref<Array<any>>([
   {
     title: "Product",
     align: "start",
     key: "product",
     width: "30%",
+    sortable: false,
   },
-  { title: "Price", align: "end", key: "Item.price" },
-  { title: "Quantity", align: "center", key: "quantity" },
-  { title: "Total", align: "end", key: "total" },
-  { title: "", align: "center", key: "delete" },
+  { title: "Price", align: "end", key: "Item.price", sortable: false },
+  { title: "Quantity", align: "center", key: "quantity", sortable: false },
+  { title: "Total", align: "end", key: "total", sortable: false },
+  { title: "", align: "center", key: "delete", sortable: false },
 ]);
 const items = [
   {
