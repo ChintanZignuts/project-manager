@@ -1,12 +1,14 @@
 <script setup lang="ts">
+//imports
 import { useCartStore } from "@/stores/cart";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { toast, type ToastOptions } from "vue3-toastify";
+
+//variable
 const cartStore = useCartStore();
 const tab = ref<string | null>(null);
 const router = useRouter();
-
 const headers = ref([
   {
     title: "Product",
@@ -37,6 +39,8 @@ const AddressData = ref({
   areaCode: "",
   contact: "",
 });
+
+//validation rules for
 const validationRules = {
   nameRules: [(v: string) => !!v || "Name is required"],
   buildingNoRules: [(v: string) => !!v || "Building No is required"],
@@ -47,6 +51,8 @@ const validationRules = {
       (v && v.length <= 10) || "Contact must be 10 characters or less",
   ],
 };
+
+//functions
 const handlePlaceOrder = () => {
   cartStore.clearCart();
   toast.success(`Order placed successfully`, {
@@ -68,11 +74,12 @@ const handlePlaceOrder = () => {
 const routeToMarketplace = () => {
   router.push("/marketplace");
 };
-const decrement = () => {};
 </script>
 <template>
+  <!-- main container -->
   <vContainer class="pb-sm-15 pb-10 h-100 overflow-y-auto" fluid>
     <div>
+      <!-- hading -->
       <div class="mt-3 mb-6">
         <div class="d-flex justify-space-between">
           <div class="d-flex py-0 align-center">
@@ -87,24 +94,22 @@ const decrement = () => {};
           </div>
         </div>
       </div>
+      <!-- main card  -->
       <VCard variant="outlined" class="bg-surface border">
         <VCardText>
-          <v-tabs
-            v-model="tab"
-            color="primary"
-            height="68px"
-            class="rounded-lg"
-          >
-            <v-tab value="one" height="70px" class="rounded-lg">
+          <!-- tab heading -->
+          <VTabs v-model="tab" color="primary" height="68px" class="rounded-lg">
+            <VTab value="one" height="70px" class="rounded-lg">
               <VIcon>mdi-cart-variant</VIcon>
               <div>
                 <div class="ma-0 pa-0"><Span>Item Cart</Span></div>
                 <span
                   class="text-subtitle-2 text-lightText text-medium-emphasis font-weight-medium d-block ml-5"
-                  >Product Summary</span
                 >
-              </div></v-tab
-            >
+                  Product Summary
+                </span>
+              </div>
+            </VTab>
             <v-tab
               value="two"
               height="70px"
@@ -119,9 +124,9 @@ const decrement = () => {};
                 >
                   Billing Information
                 </span>
-              </div></v-tab
-            >
-          </v-tabs>
+              </div>
+            </v-tab>
+          </VTabs>
 
           <v-card-text>
             <v-window v-model="tab">
@@ -243,6 +248,7 @@ const decrement = () => {};
               </v-window-item>
 
               <v-window-item value="two">
+                <!-- //address form  -->
                 <VRow>
                   <VCol cols="12" lg="6" class="mt-4">
                     <h4 class="text-h5 mb-5">Billing Address</h4>
@@ -370,9 +376,8 @@ const decrement = () => {};
                           </h6>
                         </div>
                       </VCardText>
-                    </VCard></VCol
-                  >
-                  <VCol></VCol>
+                    </VCard>
+                  </VCol>
                 </VRow>
               </v-window-item>
             </v-window>
@@ -382,10 +387,10 @@ const decrement = () => {};
     </div>
   </vContainer>
 </template>
-<style scoped>
+<!-- <style scoped>
 .tabs {
   color: orangered; /* Change this to your desired text color */
   text-transform: none;
   text-transform: unset !important;
 }
-</style>
+</style> -->
