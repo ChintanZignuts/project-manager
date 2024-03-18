@@ -9,6 +9,7 @@ import { toast, type ToastOptions } from "vue3-toastify";
 const cartStore = useCartStore();
 const tab = ref<string | null>(null);
 const router = useRouter();
+const form = ref<any>(null);
 const headers = ref<Array<any>>([
   {
     title: "Product",
@@ -54,24 +55,24 @@ const validationRules = {
 };
 
 //functions
-const handlePlaceOrder = () => {
-  cartStore.clearCart();
-  toast.success(`Order placed successfully`, {
-    autoClose: 1500,
-    type: "success",
-    pauseOnFocusLoss: false,
-    hideProgressBar: true,
-    position: toast.POSITION.BOTTOM_RIGHT,
-  } as ToastOptions);
-  AddressData.value = {
-    name: "",
-    buildingNo: "",
-    street: "",
-    city: "",
-    areaCode: "",
-    contact: "",
-  };
+const handlePlaceOrder = async () => {
+  const isValid = await form.value.validate();
+  console.log(isValid.valid);
+  if (isValid.valid) {
+    const orderData = {
+      ...AddressData.value,
+      items: cartStore.currentCartItem,
+      total: cartStore.subtotal,
+    };
+    console.log(orderData);
+    toast.success("Order Placed Successfully", {
+      position: "bottom-right",
+      duration: 3000,
+    } as ToastOptions);
+    cartStore.clearCart();
+  }
 };
+
 const routeToMarketplace = () => {
   router.push("/marketplace");
 };
@@ -254,6 +255,7 @@ const routeToMarketplace = () => {
                   <VCol cols="12" lg="6" class="mt-4">
                     <h4 class="text-h5 mb-5">Billing Address</h4>
                     <VForm
+                      ref="form"
                       @submit.prevent="handlePlaceOrder"
                       validate-on="submit"
                     >
@@ -261,6 +263,7 @@ const routeToMarketplace = () => {
                         v-model="AddressData.name"
                         variant="outlined"
                         label="Name"
+                        validate-on="input"
                         :rules="validationRules.nameRules"
                         required
                       />
@@ -268,6 +271,7 @@ const routeToMarketplace = () => {
                         v-model="AddressData.buildingNo"
                         variant="outlined"
                         label="Building No"
+                        validate-on="input"
                         :rules="validationRules.buildingNoRules"
                         required
                       />
@@ -281,6 +285,7 @@ const routeToMarketplace = () => {
                         v-model="AddressData.city"
                         variant="outlined"
                         label="City"
+                        validate-on="input"
                         :rules="validationRules.cityRules"
                         required
                       />
@@ -290,6 +295,7 @@ const routeToMarketplace = () => {
                             v-model="AddressData.areaCode"
                             variant="outlined"
                             label="Area code"
+                            validate-on="input"
                             :rules="validationRules.areaCodeRules"
                             type="number"
                             required
@@ -300,8 +306,10 @@ const routeToMarketplace = () => {
                             v-model="AddressData.contact"
                             variant="outlined"
                             label="Contact"
+                            validate-on="input"
+                            hide-details="auto"
                             :rules="validationRules.contactRules"
-                            type="tel"
+                            type="number"
                           />
                         </VCol>
                       </VRow>
@@ -385,10 +393,3 @@ const routeToMarketplace = () => {
     </div>
   </vContainer>
 </template>
-<!-- <style scoped>
-.tabs {
-  color: orangered; /* Change this to your desired text color */
-  text-transform: none;
-  text-transform: unset !important;
-}
-</style> -->
