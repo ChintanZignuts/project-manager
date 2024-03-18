@@ -253,12 +253,14 @@ const routeToMarketplace = () => {
                 <VRow>
                   <VCol cols="12" lg="6" class="mt-4">
                     <h4 class="text-h5 mb-5">Billing Address</h4>
-                    <form @submit.prevent="handlePlaceOrder">
+                    <VForm
+                      @submit.prevent="handlePlaceOrder"
+                      validate-on="submit"
+                    >
                       <VTextField
                         v-model="AddressData.name"
                         variant="outlined"
                         label="Name"
-                        placeholder="First Name"
                         :rules="validationRules.nameRules"
                         required
                       />
@@ -266,7 +268,6 @@ const routeToMarketplace = () => {
                         v-model="AddressData.buildingNo"
                         variant="outlined"
                         label="Building No"
-                        placeholder="Building No"
                         :rules="validationRules.buildingNoRules"
                         required
                       />
@@ -274,7 +275,6 @@ const routeToMarketplace = () => {
                         v-model="AddressData.street"
                         variant="outlined"
                         label="Street"
-                        placeholder="Street"
                       />
 
                       <VTextField
@@ -282,7 +282,6 @@ const routeToMarketplace = () => {
                         variant="outlined"
                         label="City"
                         :rules="validationRules.cityRules"
-                        placeholder="City"
                         required
                       />
                       <VRow>
@@ -291,7 +290,6 @@ const routeToMarketplace = () => {
                             v-model="AddressData.areaCode"
                             variant="outlined"
                             label="Area code"
-                            placeholder="Area code"
                             :rules="validationRules.areaCodeRules"
                             type="number"
                             required
@@ -303,7 +301,6 @@ const routeToMarketplace = () => {
                             variant="outlined"
                             label="Contact"
                             :rules="validationRules.contactRules"
-                            placeholder="Contact"
                             type="tel"
                           />
                         </VCol>
@@ -326,7 +323,7 @@ const routeToMarketplace = () => {
                           </VBtn>
                         </VCol>
                       </VRow>
-                    </form>
+                    </VForm>
                   </VCol>
                   <VCol cols="12" lg="6">
                     <VCard class="elevation-0 border rounded-lg">
