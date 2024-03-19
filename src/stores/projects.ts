@@ -10,6 +10,7 @@ interface Project {
   updated_at: string;
 }
 
+//store for projects
 export const useProjects = defineStore({
   id: "project",
   state: () => ({

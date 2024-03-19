@@ -37,6 +37,7 @@ const formatDate = (dateString: string): string => {
 
 const handaldateChange = (newdate: Date) => {
   cartStore.currentDate = newdate.toDateString();
+  localStorage.setItem("currentDate", cartStore.currentDate);
   if (newdate) {
     const cartItems: { item: Items; dateAdded: string }[] = JSON.parse(
       localStorage.getItem("cart") || "[]"

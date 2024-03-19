@@ -10,6 +10,8 @@ const cartStore = useCartStore();
 const tab = ref<string | null>(null);
 const router = useRouter();
 const form = ref<any>(null);
+
+//header for Data table
 const headers = ref<Array<any>>([
   {
     title: "Product",
@@ -70,6 +72,7 @@ const handlePlaceOrder = async () => {
       duration: 3000,
     } as ToastOptions);
     cartStore.clearCart();
+    tab.value = "one";
   }
 };
 
@@ -78,7 +81,6 @@ const routeToMarketplace = () => {
 };
 </script>
 <template>
-  <!-- main container -->
   <vContainer class="pb-sm-15 pb-10 h-100 overflow-y-auto" fluid>
     <div>
       <!-- hading -->
@@ -130,8 +132,10 @@ const routeToMarketplace = () => {
             </v-tab>
           </VTabs>
 
+          <!-- tab content  -->
           <v-card-text>
             <v-window v-model="tab">
+              <!-- Item Cart tab -->
               <v-window-item value="one">
                 <div>
                   <h3 class="my-4">
@@ -249,11 +253,12 @@ const routeToMarketplace = () => {
                 </VRow>
               </v-window-item>
 
+              <!-- Billing tab -->
               <v-window-item value="two">
-                <!-- //address form  -->
                 <VRow>
                   <VCol cols="12" lg="6" class="mt-4">
                     <h4 class="text-h5 mb-5">Billing Address</h4>
+                    <!-- address form  -->
                     <VForm
                       ref="form"
                       @submit.prevent="handlePlaceOrder"
