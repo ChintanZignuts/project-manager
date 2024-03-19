@@ -11,7 +11,9 @@ export const useCartStore = defineStore("cart", () => {
   const currentDate = ref<string>(
     localStorage.getItem("currentDate") || new Date().toDateString()
   );
-  const currentCartItem = ref<CartItem[]>([]);
+  const currentCartItem = ref<CartItem[]>(
+    cartItems.value.filter((item) => item.orderDate === currentDate.value)
+  );
   const ItemsInCart = computed(() => currentCartItem.value.length);
 
   // Function to add item to cart
