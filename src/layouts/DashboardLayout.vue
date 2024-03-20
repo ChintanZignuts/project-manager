@@ -22,6 +22,9 @@ const router = useRouter();
 const handleLogout = async () => {
   await usersStore.logout();
   localStorage.removeItem("token");
+  localStorage.removeItem("cart");
+  localStorage.removeItem("currentDate");
+  localStorage.removeItem("user");
   router.push("/");
 };
 

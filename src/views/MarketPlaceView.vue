@@ -45,7 +45,6 @@ const handaldateChange = (newdate: Date) => {
     const currentCart = cartItems.filter(
       (item) => item.dateAdded === newdate.toDateString()
     );
-    localStorage.setItem("currentCart", JSON.stringify(currentCart));
   }
   const formattedDate: string = formatDate(newdate.toDateString());
   orderdate.value = formattedDate;

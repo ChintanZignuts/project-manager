@@ -3,12 +3,8 @@ import { createPinia } from "pinia";
 
 import App from "./App.vue";
 import router from "./router";
-import axios from "./axiosConfig";
-
-import "vuetify/styles";
-import { createVuetify } from "vuetify";
-import * as components from "vuetify/components";
-import * as directives from "vuetify/directives";
+import axios from "../plugins/axiosConfig";
+import vuetify from "../plugins/vuetify";
 
 import Vue3Toasity, { type ToastContainerOptions } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -18,20 +14,7 @@ import en from "./languages/En-US.json";
 import gu from "./languages/Gu-Gujarati.json";
 import fr from "./languages/Fr-French.json";
 
-import { aliases, mdi } from "vuetify/iconsets/mdi";
 import "@mdi/font/css/materialdesignicons.css";
-
-const vuetify = createVuetify({
-  components,
-  directives,
-  icons: {
-    defaultSet: "mdi",
-    aliases,
-    sets: {
-      mdi,
-    },
-  },
-});
 
 const i18n = createI18n({
   legacy: false,

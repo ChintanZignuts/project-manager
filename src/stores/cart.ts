@@ -11,7 +11,7 @@ export const useCartStore = defineStore("cart", () => {
   const currentDate = ref<string>(
     localStorage.getItem("currentDate") || new Date().toDateString()
   );
-  const currentCartItem = ref<CartItem[]>(
+  const currentCartItem = computed(() =>
     cartItems.value.filter((item) => item.orderDate === currentDate.value)
   );
   const ItemsInCart = computed(() => currentCartItem.value.length);
@@ -36,16 +36,6 @@ export const useCartStore = defineStore("cart", () => {
     localStorage.setItem("currentDate", currentDate.value);
     toast.success(`${item.title} added to cart`, toastOptions);
   }
-
-  // Function to get the current cart items
-  const getCurrentCartItem = computed(() => {
-    return cartItems.value.filter(
-      (item) => item.orderDate === currentDate.value
-    );
-  });
-  watch(getCurrentCartItem, (newValue) => {
-    currentCartItem.value = newValue;
-  });
 
   // Function to increment the quantity of an item in the cart
   function incrementQuantity(item: CartItem) {
@@ -117,7 +107,7 @@ export const useCartStore = defineStore("cart", () => {
     cartItems,
     ItemsInCart,
     currentDate,
-    currentCartItem: getCurrentCartItem,
+    currentCartItem,
     addToCart,
     removeFromCart,
     clearCart,
